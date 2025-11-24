@@ -7,7 +7,7 @@
 
 /* Base tweaks */
 html { font-feature-settings: 'cv02','cv03','cv04','cv11'; }
-body { @apply font-sans bg-neutral-50 text-neutral-900; }
+body { @apply font-sans bg-white text-neutral-900; }
 
 /* Reusable utilities */
 .btn { @apply inline-flex items-center gap-2 rounded-md px-5 py-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500; }
