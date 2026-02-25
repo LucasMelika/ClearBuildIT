@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+
 // Scroll to top on route change
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -19,12 +21,32 @@ import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden.jsx';
 import CookieBeleid from './pages/CookieBeleid.jsx';
 import NotFound from './pages/NotFound.jsx';
 
+// JSON-LD Structured Data
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "ClearBuildIT",
+  "description": "Maatwerk SaaS-platformen, websites, webapps en mobile apps",
+  "url": "https://clearbuildIT.nl",
+  "areaServed": {
+    "@type": "Country",
+    "name": "Netherlands"
+  },
+  "serviceType": ["Software Development", "Web Development", "Mobile App Development"],
+  "priceRange": "$$"
+};
+
 function App() {
   const location = useLocation();
   const isDemoPage = location.pathname.startsWith('/demo/');
   
   return (
     <>
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(organizationSchema)}
+        </script>
+      </Helmet>
       <ScrollToTop />
       <Navbar />
       <Routes>

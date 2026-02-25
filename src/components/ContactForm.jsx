@@ -58,7 +58,8 @@ export default function ContactForm() {
     email: '',
     phone: '',
     projectType: 'SaaS Platform',
-    message: ''
+    message: '',
+    honeypot: '' // Spam protection field (hidden from users)
   });
   
   const [status, setStatus] = useState({
@@ -66,6 +67,25 @@ export default function ContactForm() {
     submitted: false,
     error: null
   });
+
+  // Rate limiting: max 5 submissions per hour
+  const checkRateLimit = () => {
+    const now = Date.now();
+    const oneHourInMs = 60 * 60 * 1000;
+    const submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]');
+    
+    // Filter submissions from the last hour
+    const recentSubmissions = submissions.filter(timestamp => now - timestamp < oneHourInMs);
+    
+    if (recentSubmissions.length >= 5) {
+      return false; // Rate limit exceeded
+    }
+    
+    // Add current submission timestamp
+    recentSubmissions.push(now);
+    localStorage.setItem('formSubmissions', JSON.stringify(recentSubmissions));
+    return true;
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -79,6 +99,45 @@ export default function ContactForm() {
     setStatus({ submitting: true, submitted: false, error: null });
 
     try {
+      // Honeypot protection - if filled, it's a bot
+      if (formData.honeypot) {
+        console.warn('Honeypot field filled - likely spam');
+        // Silently fail to confuse bots
+        setStatus({ submitting: false, submitted: true, error: null });
+        return;
+      }
+
+      // Rate limiting check
+      if (!checkRateLimit()) {
+        setStatus({ 
+          submitting: false, 
+          submitted: false, 
+          error: 'Te veel pogingen. Probeer het over een uur opnieuw.' 
+        });
+        return;
+      }
+
+      // Basic validation
+      if (!formData.name || !formData.email || !formData.message) {
+        setStatus({ 
+          submitting: false, 
+          submitted: false, 
+          error: 'Vul alstublieft alle verplichte velden in.' 
+        });
+        return;
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        setStatus({ 
+          submitting: false, 
+          submitted: false, 
+          error: 'Voer een geldig email adres in.' 
+        });
+        return;
+      }
+
       // EmailJS credentials
       const serviceId = 'service_sdd7yrr';
       const templateId = 'template_jdq0i0h';
@@ -115,7 +174,8 @@ export default function ContactForm() {
           email: '',
           phone: '',
           projectType: 'SaaS Platform',
-          message: ''
+          message: '',
+          honeypot: ''
         });
         setStatus({ submitting: false, submitted: false, error: null });
       }, 5000);
@@ -170,6 +230,17 @@ export default function ContactForm() {
       )}
 
       <form className="space-y-4" onSubmit={handleSubmit}>
+        {/* Honeypot field - hidden from real users */}
+        <input
+          type="text"
+          name="honeypot"
+          value={formData.honeypot}
+          onChange={handleChange}
+          style={{ display: 'none' }}
+          tabIndex="-1"
+          autoComplete="off"
+        />
+
         <div>
           <label className="block text-sm font-medium text-neutral-700 mb-1">
             Naam <span className="text-red-500">*</span>
