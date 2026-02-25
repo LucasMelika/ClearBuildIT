@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from '../assets/icon.png';
+import logo from '../assets/logoTrans.png';
 import { Link } from 'react-router-dom';
 
 const primary = [
