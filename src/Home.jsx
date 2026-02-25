@@ -173,11 +173,6 @@ export default function Home() {
 
       {/* Diensten Section */}
       <section id="diensten" className="max-w-6xl mx-auto px-4 py-20 bg-white scroll-mt-16 md:scroll-mt-20">
-        <div className="mb-4">
-          <div className="inline-block px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-bold uppercase tracking-wide mb-4">
-            01. Diensten
-          </div>
-        </div>
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
             Onze <span className="text-green-700">Diensten</span>
