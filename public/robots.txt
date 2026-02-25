@@ -2,9 +2,26 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /.env*
+Disallow: /api/private/
+
+# Crawlers we want to prioritize
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Block low-quality crawlers
+User-agent: AhrefsBot
+User-agent: SemrushBot
+User-agent: MJ12bot
+Disallow: /
 
 # Sitemaps
-Sitemap: https://clearbuildIT.nl/sitemap.xml
+Sitemap: https://clearbuildit.nl/sitemap.xml
 
 # Crawl delay (in seconds)
 Crawl-delay: 1
+

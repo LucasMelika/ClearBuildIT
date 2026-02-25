@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { organizationSchema, servicesSchema, websiteSchema } from './utils/seoSchemas.js';
 
 // Scroll to top on route change
 function ScrollToTop() {
@@ -22,21 +23,6 @@ import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden.jsx';
 import CookieBeleid from './pages/CookieBeleid.jsx';
 import NotFound from './pages/NotFound.jsx';
 
-// JSON-LD Structured Data
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "ClearBuildIT",
-  "description": "Maatwerk SaaS-platformen, websites, webapps en mobile apps",
-  "url": "https://clearbuildIT.nl",
-  "areaServed": {
-    "@type": "Country",
-    "name": "Netherlands"
-  },
-  "serviceType": ["Software Development", "Web Development", "Mobile App Development"],
-  "priceRange": "$$"
-};
-
 function App() {
   const location = useLocation();
   const isDemoPage = location.pathname.startsWith('/demo/');
@@ -44,8 +30,24 @@ function App() {
   return (
     <>
       <Helmet>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="language" content="nl" />
+        <meta name="keywords" content="SaaS, webapp, mobile app, software development, Netherlands" />
+        
+        {/* Preconnect to external resources */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify(organizationSchema)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(servicesSchema)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(websiteSchema)}
         </script>
       </Helmet>
       <ScrollToTop />

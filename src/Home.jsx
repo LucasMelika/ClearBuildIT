@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { seoMeta } from './utils/seoSchemas.js';
 import ServicesCard from './components/ServicesCard';
 import ContactForm from './components/ContactForm';
 import FAQSection from './components/FAQSection';
@@ -72,11 +73,33 @@ export default function Home() {
     <>
       <ScrollCTA />
       <Helmet>
-        <title>ClearBuildIT · Maatwerk SaaS & Apps voor Groeiende Bedrijven</title>
-        <meta name="description" content="ClearBuildIT bouwt maatwerk SaaS-platformen, webapps en mobile apps die uw bedrijf laten groeien. Van MVP tot enterprise oplossingen." />
-        <meta property="og:title" content="ClearBuildIT · Premium Digitale Oplossingen" />
-        <meta property="og:description" content="Schaalbare SaaS-platformen en apps voor groeiende bedrijven" />
-        <meta name="keywords" content="SaaS ontwikkeling, webapp ontwikkeling, mobile app ontwikkeling, maatwerk software, Nederland" />
+        <title>{seoMeta.home.title}</title>
+        <meta name="description" content={seoMeta.home.description} />
+        <meta name="keywords" content={seoMeta.home.keywords} />
+        <meta name="author" content="ClearBuildIT" />
+        <meta name="theme-color" content="#ffffff" />
+        <link rel="canonical" href={seoMeta.home.canonical} />
+        
+        {/* Open Graph Tags */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={seoMeta.home.ogTitle} />
+        <meta property="og:description" content={seoMeta.home.ogDescription} />
+        <meta property="og:url" content={seoMeta.home.canonical} />
+        <meta property="og:image" content={seoMeta.home.ogImage} />
+        <meta property="og:image:alt" content="ClearBuildIT - Maatwerk SaaS & Apps" />
+        <meta property="og:site_name" content="ClearBuildIT" />
+        <meta property="og:locale" content="nl_NL" />
+        
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoMeta.home.ogTitle} />
+        <meta name="twitter:description" content={seoMeta.home.ogDescription} />
+        <meta name="twitter:image" content={seoMeta.home.ogImage} />
+        <meta name="twitter:site" content="@ClearBuildIT" />
+        
+        {/* Search Engine Visibility */}
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
       </Helmet>
     <main className="bg-white min-h-screen pb-16 scroll-smooth">
       {/* Hero Section */}
