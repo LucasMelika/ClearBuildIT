@@ -1,15 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import ServicesCard from './components/ServicesCard';
-import ProjectSlider from './components/ProjectSlider';
-import FeatureCard from './components/FeatureCard';
-import ScrollCTA from './components/ScrollCTA';
 import ContactForm from './components/ContactForm';
-import TestimonialsSection from './components/TestimonialsSection';
-import PricingSection from './components/PricingSection';
 import FAQSection from './components/FAQSection';
-import TeamSection from './components/TeamSection';
-import ProcessTimeline from './components/ProcessTimeline';
+import ScrollCTA from './components/ScrollCTA';
 import { CloudIcon, ShieldCheckIcon, BoltIcon, UsersIcon, DevicePhoneMobileIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 
 // Animated stat counter component
@@ -147,6 +141,11 @@ export default function Home() {
 
       {/* Diensten Section */}
       <section id="diensten" className="max-w-6xl mx-auto px-4 py-20 bg-white scroll-mt-16 md:scroll-mt-20">
+        <div className="mb-4">
+          <div className="inline-block px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-bold uppercase tracking-wide mb-4">
+            01. Diensten
+          </div>
+        </div>
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
             Onze <span className="text-green-700">Diensten</span>
@@ -160,6 +159,11 @@ export default function Home() {
 
       {/* Hoe werken wij Section */}
       <section id="proces" className="max-w-6xl mx-auto px-4 py-20 scroll-mt-16 md:scroll-mt-20">
+        <div className="mb-4">
+          <div className="inline-block px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-bold uppercase tracking-wide mb-4">
+            02. Proces
+          </div>
+        </div>
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-3">
             Hoe werken wij?
@@ -236,6 +240,11 @@ export default function Home() {
       {/* Tech Stack Section */}
       <section id="tech" className="bg-gradient-to-br from-neutral-50 to-blue-50 py-20 scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-6xl mx-auto px-4">
+          <div className="mb-4">
+            <div className="inline-block px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-bold uppercase tracking-wide mb-4">
+              03. Technologie
+            </div>
+          </div>
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-3">
               Moderne technologie
@@ -315,6 +324,11 @@ export default function Home() {
 
       {/* Waarom wij? Section */}
       <section id="features" className="max-w-6xl mx-auto px-4 mb-20 mt-20 bg-white scroll-mt-16 md:scroll-mt-20">
+        <div className="mb-4">
+          <div className="inline-block px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-bold uppercase tracking-wide mb-4">
+            04. Waarom wij?
+          </div>
+        </div>
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
             Waarom <span className="text-green-700">kiezen voor ons</span>?
@@ -468,22 +482,27 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <TestimonialsSection />
+      {/* <TestimonialsSection /> */}
 
       {/* Pricing Section */}
-      <PricingSection />
+      {/* <PricingSection /> */}
 
       {/* Process Timeline */}
-      <ProcessTimeline />
+      {/* <ProcessTimeline /> */}
 
       {/* Team Section */}
-      <TeamSection />
+      {/* <TeamSection /> */}
 
       {/* FAQ Section */}
       <FAQSection />
 
       {/* Contact Section */}
       <section id="contact" className="max-w-4xl mx-auto px-4 py-20 scroll-mt-16 md:scroll-mt-20">
+        <div className="mb-4">
+          <div className="inline-block px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-bold uppercase tracking-wide mb-4">
+            05. Contact
+          </div>
+        </div>
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-3">
             Klaar om te starten?
