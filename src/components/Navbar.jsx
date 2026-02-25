@@ -52,7 +52,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
         {/* Logo */}
         <Link to="/" onClick={() => window.scrollTo(0, 0)} className="flex items-center hover:opacity-80 transition flex-shrink-0 active:scale-95" aria-label="Home">
-          <img src={logo} alt="Logo" className="h-20 w-auto" />
+          <img src={logo} alt="Logo" className="h-24 w-auto" />
         </Link>
 
         {/* Desktop nav */}
@@ -111,7 +111,7 @@ export default function Navbar() {
                 <div className="bg-white rounded-2xl shadow-2xl w-full">
                   <div className="flex items-center justify-between px-5 pt-5 pb-2">
                     <Link to="/" className="flex items-center" aria-label="Home">
-                      <img src={logo} alt="Logo" className="h-10 w-auto select-none" draggable="false" />
+                      <img src={logo} alt="Logo" className="h-12 w-auto select-none" draggable="false" />
                     </Link>
                     <button
                       className="inline-flex h-8 w-8 items-center justify-center rounded border border-neutral-200 text-2xl"
