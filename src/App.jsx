@@ -20,6 +20,9 @@ import MobileAppDemo from './pages/MobileAppDemo.jsx';
 import Privacybeleid from './pages/Privacybeleid.jsx';
 import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden.jsx';
 import CookieBeleid from './pages/CookieBeleid.jsx';
+import Blog from './pages/Blog.jsx';
+import CaseStudies from './pages/CaseStudies.jsx';
+import Resources from './pages/Resources.jsx';
 import NotFound from './pages/NotFound.jsx';
 
 // JSON-LD Structured Data
@@ -52,6 +55,9 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/case-studies" element={<CaseStudies />} />
+        <Route path="/resources" element={<Resources />} />
         <Route path="/demo/saas" element={<SaaSDemo />} />
         <Route path="/demo/webapp" element={<WebAppDemo />} />
         <Route path="/demo/mobile" element={<MobileAppDemo />} />
