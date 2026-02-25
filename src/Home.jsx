@@ -346,7 +346,7 @@ export default function Home() {
             Waarom <span className="text-green-700">kiezen voor ons</span>?
           </h2>
           <p className="text-lg text-neutral-600 max-w-3xl mx-auto px-4">
-            Bij ClearBuildIT draait alles om vertrouwen, kwaliteit en resultaat. We bouwen niet alleen software—we bouwen langdurige partnerships met bedrijven die willen groeien.
+            Bij ClearBuildIT draait alles om vertrouwen, kwaliteit en resultaat. We bouwen niet alleen software we bouwen langdurige partnerships met bedrijven die willen groeien.
           </p>
         </div>
 
