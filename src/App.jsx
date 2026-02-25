@@ -10,19 +10,42 @@ function ScrollToTop() {
 }
 import Navbar from './components/Navbar.jsx';
 import Home from './Home';
-import Diensten from './Diensten.jsx';
 import Footer from './components/Footer.jsx';
+import SaaSDemo from './pages/SaaSDemo.jsx';
+import WebAppDemo from './pages/WebAppDemo.jsx';
+import MobileAppDemo from './pages/MobileAppDemo.jsx';
+import Privacybeleid from './pages/Privacybeleid.jsx';
+import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden.jsx';
+import CookieBeleid from './pages/CookieBeleid.jsx';
+import NotFound from './pages/NotFound.jsx';
 
-export default function App() {
+function App() {
+  const location = useLocation();
+  const isDemoPage = location.pathname.startsWith('/demo/');
+  
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/diensten" element={<Diensten />} />
+        <Route path="/demo/saas" element={<SaaSDemo />} />
+        <Route path="/demo/webapp" element={<WebAppDemo />} />
+        <Route path="/demo/mobile" element={<MobileAppDemo />} />
+        <Route path="/privacybeleid" element={<Privacybeleid />} />
+        <Route path="/algemene-voorwaarden" element={<AlgemeneVoorwaarden />} />
+        <Route path="/cookie-beleid" element={<CookieBeleid />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer />
+      {!isDemoPage && <Footer />}
+    </>
+  );
+}
+
+export default function AppWithRouter() {
+  return (
+    <Router>
+      <App />
     </Router>
   );
 }

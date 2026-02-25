@@ -1,49 +1,91 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from '../assets/logoTrans.png';
 import { Link } from 'react-router-dom';
 
 const primary = [
-  { label: 'Diensten', href: '/diensten' },
+  { label: 'Diensten', href: '#diensten' },
   { label: 'Proces', href: '#proces' },
   { label: 'Technologie', href: '#tech' },
+  { label: 'Waarom wij?', href: '#features' },
   { label: 'Contact', href: '#contact' }
 ];
 
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+
+      // Active section detection
+      const sections = primary.map(item => item.href.replace('#', '')).filter(h => h);
+      let current = '';
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            current = section;
+            break;
+          }
+        }
+      }
+      setActiveSection(current);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-neutral-100">
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${
+      scrolled 
+        ? 'bg-white/80 backdrop-blur-md shadow-md border-b border-neutral-200' 
+        : 'bg-white border-b border-neutral-100'
+    }`}>
       <div className="max-w-6xl mx-auto px-4 flex items-center h-16 relative">
         {/* Logo left */}
-        <Link to="/" className="flex items-center mr-6" aria-label="Home">
+        <Link to="/" className="flex items-center mr-6 transition-transform hover:scale-105" aria-label="Home">
           <img src={logo} alt="Logo" className="h-32 w-auto -my-4 select-none" draggable="false" />
         </Link>
         {/* Desktop nav center */}
         <nav className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <ul className="flex gap-8 items-center">
-            {primary.map(item => (
-              <li key={item.label} className="relative flex items-center">
-                {item.href.startsWith('/') ? (
-                  <Link
-                    to={item.href}
-                    className="text-sm font-medium text-neutral-800 hover:text-black px-1 py-2 transition relative after:content-[''] after:block after:h-[2px] after:bg-green-500 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200 after:origin-left after:rounded-full after:mt-1 after:w-full"
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <a
-                    href={item.href}
-                    className="text-sm font-medium text-neutral-800 hover:text-black px-1 py-2 transition relative after:content-[''] after:block after:h-[2px] after:bg-green-500 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200 after:origin-left after:rounded-full after:mt-1 after:w-full"
-                  >
-                    {item.label}
-                  </a>
-                )}
-                {item.label === 'Contact' && (
-                  <span className="hidden lg:inline-flex items-center absolute right-0 top-0 translate-x-full -translate-y-1/2 px-1.5 py-0.5 rounded-full bg-green-100 text-green-900 text-[9px] font-semibold shadow-sm whitespace-nowrap" style={{letterSpacing: '0.3px', marginLeft: '0px'}}>LET'S TALK</span>
-                )}
-              </li>
-            ))}
+            {primary.map(item => {
+              const isActive = activeSection === item.href.replace('#', '');
+              return (
+                <li key={item.label} className="relative flex items-center">
+                  {item.href.startsWith('/') ? (
+                    <Link
+                      to={item.href}
+                      className={`text-sm font-medium px-1 py-2 transition relative after:content-[''] after:block after:h-[2px] after:bg-gradient-to-r after:from-green-500 after:to-green-600 after:rounded-full after:mt-1 after:w-full after:transition-transform after:duration-200 after:origin-left ${
+                        isActive 
+                          ? 'text-green-700 after:scale-x-100' 
+                          : 'text-neutral-800 hover:text-black after:scale-x-0 hover:after:scale-x-100'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={item.href}
+                      className={`text-sm font-medium px-1 py-2 transition relative after:content-[''] after:block after:h-[2px] after:bg-gradient-to-r after:from-green-500 after:to-green-600 after:rounded-full after:mt-1 after:w-full after:transition-transform after:duration-200 after:origin-left ${
+                        isActive 
+                          ? 'text-green-700 after:scale-x-100' 
+                          : 'text-neutral-800 hover:text-black after:scale-x-0 hover:after:scale-x-100'
+                      }`}
+                    >
+                      {item.label}
+                    </a>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </nav>
         {/* Hamburger for mobile */}
@@ -97,12 +139,21 @@ export default function Navbar() {
                             <a
                               href={item.href}
                               className="flex-1 flex items-center text-base font-medium text-neutral-800 hover:text-green-700 px-4 py-4 transition"
-                              onClick={() => setOpen(false)}
+                              onClick={(e) => {
+                                setOpen(false);
+                                // Smooth scroll voor anker links
+                                if (item.href.startsWith('#')) {
+                                  e.preventDefault();
+                                  const target = document.querySelector(item.href);
+                                  if (target) {
+                                    setTimeout(() => {
+                                      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                    }, 300);
+                                  }
+                                }
+                              }}
                             >
                               {item.label}
-                              {item.label === 'Contact' && (
-                                <span className="ml-2 px-3 py-1 rounded-full bg-green-100 text-green-900 text-xs font-semibold align-middle" style={{letterSpacing: '0.3px'}}>LET'S TALK</span>
-                              )}
                             </a>
                           )}
                           <span className="pr-4 text-neutral-300 group-hover:text-green-400">
