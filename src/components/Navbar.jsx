@@ -65,10 +65,10 @@ export default function Navbar() {
                   {item.href.startsWith('/') ? (
                     <Link
                       to={item.href}
-                      className={`text-xs font-medium px-0.5 py-2 transition ${
+                      className={`text-xs font-medium px-1 py-2 rounded transition duration-150 active:scale-95 cursor-pointer ${
                         isActive 
-                          ? 'text-green-700' 
-                          : 'text-neutral-700 hover:text-neutral-900'
+                          ? 'text-green-700 font-semibold underline underline-offset-2 decoration-green-600 decoration-2' 
+                          : 'text-neutral-700 hover:text-green-600 hover:underline hover:underline-offset-2 hover:decoration-green-400 hover:decoration-1'
                       }`}
                     >
                       {item.label}
@@ -76,10 +76,10 @@ export default function Navbar() {
                   ) : (
                     <a
                       href={item.href}
-                      className={`text-xs font-medium px-0.5 py-2 transition ${
+                      className={`text-xs font-medium px-1 py-2 rounded transition duration-150 active:scale-95 cursor-pointer ${
                         isActive 
-                          ? 'text-green-700' 
-                          : 'text-neutral-700 hover:text-neutral-900'
+                          ? 'text-green-700 font-semibold underline underline-offset-2 decoration-green-600 decoration-2' 
+                          : 'text-neutral-700 hover:text-green-600 hover:underline hover:underline-offset-2 hover:decoration-green-400 hover:decoration-1'
                       }`}
                     >
                       {item.label}
