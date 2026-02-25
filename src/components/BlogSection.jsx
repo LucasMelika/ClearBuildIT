@@ -4,39 +4,43 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 const articles = [
   {
     id: 1,
-    title: "SaaS Platform Development: Van Idee tot Launch",
-    description: "Leer hoe je een succesvolle SaaS-platform bouwt met moderne technologie, best practices en real-world voorbeelden.",
+    title: "SaaS Platform Development: Van Idee tot Launch in 2026",
+    description: "Complete gids voor het bouwen van schaalbare SaaS-platformen met React, Node.js en cloud infrastructure. Leer de best practices, architectuur patterns en deployment strategies.",
     category: "SaaS Development",
-    readTime: "8 min",
+    readTime: "12 min",
     date: "25 Feb 2026",
-    slug: "#blog/saas-platform-development"
+    slug: "#blog/saas-platform-development",
+    excerpt: "In deze gids behandelen we alles wat je nodig hebt om een succesvolle SaaS-platform te bouwen..."
   },
   {
     id: 2,
-    title: "Web App vs Mobile App: Welke Moet Je Kiezen?",
-    description: "Complete gids om te bepalen of je een webapp, native app of cross-platform oplossing nodig hebt voor jouw bedrijf.",
+    title: "Web App vs Native Mobile App: Complete Comparison 2026",
+    description: "Uitgebreide analyse van web applicaties, native apps (iOS/Android) en cross-platform oplossingen. Kosten, performance, user experience en time-to-market vergelijking.",
     category: "Development Strategy",
-    readTime: "6 min",
+    readTime: "10 min",
     date: "20 Feb 2026",
-    slug: "#blog/web-app-vs-mobile-app"
+    slug: "#blog/web-app-vs-mobile-app",
+    excerpt: "Welke technologie kies je voor jouw startup of bedrijf? Web, native of cross-platform? Dit artikel helpt je..."
   },
   {
     id: 3,
-    title: "Agile Development: Flexibel en Transparant Bouwen",
-    description: "Waarom agile development de beste aanpak is voor software projecten en hoe ClearBuildIT dit implementeert.",
+    title: "Agile Development Methodology: Flexibel en Transparant Bouwen",
+    description: "Waarom agile development essentieel is voor moderne software projecten. Sprint planning, daily standups, retrospectives en iteratieve delivery.",
     category: "Development",
-    readTime: "7 min",
+    readTime: "8 min",
     date: "15 Feb 2026",
-    slug: "#blog/agile-development"
+    slug: "#blog/agile-development",
+    excerpt: "Agile development helpt teams sneller te itereren, feedback in te bouwen en risico's te minimaliseren..."
   },
   {
     id: 4,
-    title: "Cloud Native Architectuur voor Schaalbare Apps",
-    description: "How to architect cloud-native applications die automatisch schalen met vraag. AWS, Azure en GCP best practices.",
+    title: "Cloud-Native Architecture: Scalable Apps op AWS/Azure/GCP",
+    description: "Complete gids voor het ontwerpen van cloud-native applicaties die automatisch schalen. Microservices, containerization (Docker), Kubernetes en serverless computing.",
     category: "Cloud & Infrastructure",
-    readTime: "9 min",
+    readTime: "11 min",
     date: "10 Feb 2026",
-    slug: "#blog/cloud-native-architecture"
+    slug: "#blog/cloud-native-architecture",
+    excerpt: "Met cloud-native architectuur kun je apps bouwen die automatisch schalen met vraag..."
   }
 ];
 
@@ -77,6 +81,10 @@ export default function BlogSection() {
             
             <p className="text-neutral-600 text-sm mb-4">
               {article.description}
+            </p>
+
+            <p className="text-neutral-500 text-xs italic mb-4 border-l-2 border-green-300 pl-3">
+              {article.excerpt}
             </p>
 
             <div className="flex items-center justify-between pt-4 border-t border-neutral-100">
