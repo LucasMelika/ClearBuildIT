@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom';
 const primary = [
   { label: 'Diensten', href: '#diensten' },
   { label: 'Proces', href: '#proces' },
+  { label: 'Over ons', href: '/about' },
+  { label: 'Team', href: '/team' },
   { label: 'Blog', href: '/blog' },
-  { label: 'Resources', href: '/resources' },
-  { label: 'Contact', href: '#contact' }
+  { label: 'Contact', href: '/contact' }
 ];
 
 

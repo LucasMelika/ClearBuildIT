@@ -23,6 +23,11 @@ import CookieBeleid from './pages/CookieBeleid.jsx';
 import Blog from './pages/Blog.jsx';
 import CaseStudies from './pages/CaseStudies.jsx';
 import Resources from './pages/Resources.jsx';
+import Contact from './pages/Contact.jsx';
+import About from './pages/About.jsx';
+import Services from './pages/Services.jsx';
+import Team from './pages/Team.jsx';
+import Faq from './pages/Faq.jsx';
 import NotFound from './pages/NotFound.jsx';
 
 // JSON-LD Structured Data
@@ -55,6 +60,11 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/faq" element={<Faq />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/case-studies" element={<CaseStudies />} />
         <Route path="/resources" element={<Resources />} />
