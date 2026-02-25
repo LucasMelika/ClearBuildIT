@@ -5,22 +5,17 @@ import { Link } from 'react-router-dom';
 const primary = [
   { label: 'Diensten', href: '#diensten' },
   { label: 'Proces', href: '#proces' },
-  { label: 'Over ons', href: '/about' },
-  { label: 'Team', href: '/team' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Contact', href: '/contact' }
+  { label: 'Technologie', href: '#tech' },
+  { label: 'Waarom wij?', href: '#features' },
+  { label: 'Contact', href: '#contact' }
 ];
-
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-
       // Active section detection
       const sections = primary.map(item => item.href.replace('#', '')).filter(h => h);
       let current = '';
@@ -44,137 +39,122 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${
-      scrolled 
-        ? 'bg-white/80 backdrop-blur-md shadow-md border-b border-neutral-200' 
-        : 'bg-white border-b border-neutral-100'
-    }`}>
-      <div className="max-w-6xl mx-auto px-4 flex items-center h-16 relative">
-        {/* Logo left */}
-        <Link to="/" className="flex items-center mr-6 transition-transform hover:scale-105" aria-label="Home">
-          <img src={logo} alt="Logo" className="h-32 w-auto -my-4 select-none" draggable="false" />
+    <header className="sticky top-0 z-50 bg-white border-b border-neutral-200">
+      <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-16">
+        {/* Logo */}
+        <Link to="/" className="flex items-center hover:opacity-80 transition" aria-label="Home">
+          <img src={logo} alt="ClearBuildIT" className="h-12 w-auto" />
         </Link>
-        {/* Desktop nav center */}
-        <nav className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+
+        {/* Desktop nav */}
+        <nav className="hidden md:block">
           <ul className="flex gap-8 items-center">
             {primary.map(item => {
               const isActive = activeSection === item.href.replace('#', '');
+              const isAnchor = !item.href.startsWith('/');
+              
               return (
-                <li key={item.label} className="relative flex items-center">
-                  {item.href.startsWith('/') ? (
-                    <Link
-                      to={item.href}
-                      className={`text-sm font-medium px-1 py-2 transition relative after:content-[''] after:block after:h-[2px] after:bg-gradient-to-r after:from-green-500 after:to-green-600 after:rounded-full after:mt-1 after:w-full after:transition-transform after:duration-200 after:origin-left ${
-                        isActive 
-                          ? 'text-green-700 after:scale-x-100' 
-                          : 'text-neutral-800 hover:text-black after:scale-x-0 hover:after:scale-x-100'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  ) : (
+                <li key={item.label}>
+                  {isAnchor ? (
                     <a
                       href={item.href}
-                      className={`text-sm font-medium px-1 py-2 transition relative after:content-[''] after:block after:h-[2px] after:bg-gradient-to-r after:from-green-500 after:to-green-600 after:rounded-full after:mt-1 after:w-full after:transition-transform after:duration-200 after:origin-left ${
+                      className={`text-sm font-medium transition ${
                         isActive 
-                          ? 'text-green-700 after:scale-x-100' 
-                          : 'text-neutral-800 hover:text-black after:scale-x-0 hover:after:scale-x-100'
+                          ? 'text-green-700' 
+                          : 'text-neutral-700 hover:text-neutral-900'
                       }`}
                     >
                       {item.label}
                     </a>
+                  ) : (
+                    <Link
+                      to={item.href}
+                      className="text-sm font-medium text-neutral-700 hover:text-neutral-900 transition"
+                    >
+                      {item.label}
+                    </Link>
                   )}
                 </li>
               );
             })}
           </ul>
         </nav>
-        {/* Hamburger for mobile */}
+
+        {/* Mobile menu button */}
         <button
-          className="md:hidden ml-auto flex items-center justify-center h-10 w-10 rounded border border-neutral-200"
-          aria-label="Open menu"
+          className="md:hidden p-2 hover:bg-neutral-100 rounded transition"
+          aria-label="Menu"
           onClick={() => setOpen(true)}
         >
-          <span className="sr-only">Menu</span>
-          <div className="space-y-1">
-            <span className="block h-0.5 w-6 bg-neutral-800 rounded" />
-            <span className="block h-0.5 w-6 bg-neutral-800 rounded" />
-            <span className="block h-0.5 w-6 bg-neutral-800 rounded" />
-          </div>
+          <svg className="w-6 h-6 text-neutral-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
         </button>
+
         {/* Mobile drawer */}
         {open && (
-          <div className="fixed inset-0 z-50 bg-black/40 flex justify-end" onClick={() => setOpen(false)}>
+          <div className="fixed inset-0 z-40 bg-black/20" onClick={() => setOpen(false)}>
             <div
-              className="relative h-full w-full max-w-xs flex flex-col items-end"
+              className="fixed right-0 top-0 h-full w-80 bg-white shadow-lg flex flex-col"
               onClick={e => e.stopPropagation()}
             >
-              <div className="w-full p-4">
-                <div className="bg-white rounded-2xl shadow-2xl w-full">
-                  <div className="flex items-center justify-between px-5 pt-5 pb-2">
-                    <Link to="/" className="flex items-center" aria-label="Home">
-                      <img src={logo} alt="Logo" className="h-10 w-auto select-none" draggable="false" />
-                    </Link>
-                    <button
-                      className="inline-flex h-8 w-8 items-center justify-center rounded border border-neutral-200 text-2xl"
-                      onClick={() => setOpen(false)}
-                      aria-label="Close menu"
-                    >×</button>
+              {/* Drawer header */}
+              <div className="flex items-center justify-between p-4 border-b border-neutral-200">
+                <img src={logo} alt="ClearBuildIT" className="h-8 w-auto" />
+                <button
+                  className="p-1 hover:bg-neutral-100 rounded transition"
+                  onClick={() => setOpen(false)}
+                  aria-label="Close menu"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Drawer nav */}
+              <nav className="flex-1 overflow-y-auto">
+                <ul className="divide-y divide-neutral-100">
+                  {primary.map(item => (
+                    <li key={item.label}>
+                      {!item.href.startsWith('/') ? (
+                        <a
+                          href={item.href}
+                          className="block px-4 py-3 text-neutral-700 hover:bg-green-50 hover:text-green-700 transition"
+                          onClick={() => setOpen(false)}
+                        >
+                          {item.label}
+                        </a>
+                      ) : (
+                        <Link
+                          to={item.href}
+                          className="block px-4 py-3 text-neutral-700 hover:bg-green-50 hover:text-green-700 transition"
+                          onClick={() => setOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              {/* Drawer footer */}
+              <div className="border-t border-neutral-200 p-4 bg-neutral-50">
+                <div className="text-xs font-semibold text-neutral-700 uppercase tracking-wide mb-3">Contact</div>
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <p className="text-neutral-500 text-xs">Email</p>
+                    <a href="mailto:info@clearbuildit.nl" className="text-green-600 hover:text-green-700 font-medium">
+                      info@clearbuildit.nl
+                    </a>
                   </div>
-                  <nav className="flex-1 overflow-y-auto px-2 pb-2 pt-1">
-                    <ul className="flex flex-col divide-y divide-neutral-100">
-                      {primary.map(item => (
-                        <li key={item.label} className="flex items-center group">
-                          {item.href.startsWith('/') ? (
-                            <Link
-                              to={item.href}
-                              className="flex-1 flex items-center text-base font-medium text-neutral-800 hover:text-green-700 px-4 py-4 transition"
-                              onClick={() => setOpen(false)}
-                            >
-                              {item.label}
-                              {item.label === 'Contact' && (
-                                <span className="ml-2 px-3 py-1 rounded-full bg-green-100 text-green-900 text-xs font-semibold align-middle" style={{letterSpacing: '0.3px'}}>LET'S TALK</span>
-                              )}
-                            </Link>
-                          ) : (
-                            <a
-                              href={item.href}
-                              className="flex-1 flex items-center text-base font-medium text-neutral-800 hover:text-green-700 px-4 py-4 transition"
-                              onClick={(e) => {
-                                setOpen(false);
-                                // Smooth scroll voor anker links
-                                if (item.href.startsWith('#')) {
-                                  e.preventDefault();
-                                  const target = document.querySelector(item.href);
-                                  if (target) {
-                                    setTimeout(() => {
-                                      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                    }, 300);
-                                  }
-                                }
-                              }}
-                            >
-                              {item.label}
-                            </a>
-                          )}
-                          <span className="pr-4 text-neutral-300 group-hover:text-green-400">
-                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M9 6l6 6-6 6"/></svg>
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="mt-6 px-4 pb-4">
-                      <div className="text-xs text-neutral-500 font-semibold mb-1">Contact us</div>
-                      <div className="flex justify-between text-sm py-1">
-                        <span className="text-neutral-700">Bellen</span>
-                        <span className="text-neutral-900 font-medium">+312 94 30 00 03</span>
-                      </div>
-                      <div className="flex justify-between text-sm py-1">
-                        <span className="text-neutral-700">E-mail</span>
-                        <span className="text-neutral-900 font-medium">info@clearbuildit.nl</span>
-                      </div>
-                    </div>
-                  </nav>
+                  <div>
+                    <p className="text-neutral-500 text-xs">Telefoon</p>
+                    <a href="tel:+31647894521" className="text-green-600 hover:text-green-700 font-medium">
+                      +31 6 47 89 45 21
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
