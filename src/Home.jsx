@@ -5,6 +5,11 @@ import ProjectSlider from './components/ProjectSlider';
 import FeatureCard from './components/FeatureCard';
 import ScrollCTA from './components/ScrollCTA';
 import ContactForm from './components/ContactForm';
+import TestimonialsSection from './components/TestimonialsSection';
+import PricingSection from './components/PricingSection';
+import FAQSection from './components/FAQSection';
+import TeamSection from './components/TeamSection';
+import ProcessTimeline from './components/ProcessTimeline';
 import { CloudIcon, ShieldCheckIcon, BoltIcon, UsersIcon, DevicePhoneMobileIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 
 // Animated stat counter component
@@ -461,6 +466,21 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <TestimonialsSection />
+
+      {/* Pricing Section */}
+      <PricingSection />
+
+      {/* Process Timeline */}
+      <ProcessTimeline />
+
+      {/* Team Section */}
+      <TeamSection />
+
+      {/* FAQ Section */}
+      <FAQSection />
 
       {/* Contact Section */}
       <section id="contact" className="max-w-4xl mx-auto px-4 py-20 scroll-mt-16 md:scroll-mt-20">
