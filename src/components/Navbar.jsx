@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 const primary = [
   { label: 'Diensten', href: '#diensten' },
   { label: 'Proces', href: '#proces' },
-  { label: 'Technologie', href: '#tech' },
-  { label: 'Waarom wij?', href: '#features' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Resources', href: '/resources' },
   { label: 'Contact', href: '#contact' }
 ];
 
