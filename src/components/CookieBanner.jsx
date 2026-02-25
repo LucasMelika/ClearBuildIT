@@ -1,19 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { useConsentStore } from '../lib/consentStore';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
 export default function CookieBanner() {
-  const { hasConsented, acceptAll, rejectAll, setAllConsent } = useConsentStore();
+  const [hasConsented, setHasConsented] = useState(true);
   const [showDetailed, setShowDetailed] = useState(false);
   const [analytics, setAnalytics] = useState(true);
   const [marketing, setMarketing] = useState(false);
   const [preferences, setPreferences] = useState(false);
 
+  useEffect(() => {
+    const stored = localStorage.getItem('cookie-consent');
+    if (!stored) {
+      setHasConsented(false);
+    }
+  }, []);
+
   if (hasConsented) return null;
 
   const handleCustom = () => {
-    setAllConsent(analytics, marketing, preferences);
+    const consent = { analytics, marketing, preferences, timestamp: Date.now() };
+    localStorage.setItem('cookie-consent', JSON.stringify(consent));
+    setHasConsented(true);
     setShowDetailed(false);
+  };
+
+  const handleRejectAll = () => {
+    const consent = { analytics: false, marketing: false, preferences: false, timestamp: Date.now() };
+    localStorage.setItem('cookie-consent', JSON.stringify(consent));
+    setHasConsented(true);
+  };
+
+  const handleAcceptAll = () => {
+    const consent = { analytics: true, marketing: true, preferences: true, timestamp: Date.now() };
+    localStorage.setItem('cookie-consent', JSON.stringify(consent));
+    setHasConsented(true);
   };
 
   return (
@@ -34,7 +54,7 @@ export default function CookieBanner() {
 
               <div className="flex flex-wrap gap-3 w-full sm:w-auto">
                 <button
-                  onClick={rejectAll}
+                  onClick={handleRejectAll}
                   className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
                 >
                   Alle weigeren
@@ -46,7 +66,7 @@ export default function CookieBanner() {
                   Aanpassen
                 </button>
                 <button
-                  onClick={acceptAll}
+                  onClick={handleAcceptAll}
                   className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors"
                 >
                   Alles accepteren
@@ -162,7 +182,7 @@ export default function CookieBanner() {
               {/* Buttons */}
               <div className="flex flex-wrap gap-3">
                 <button
-                  onClick={rejectAll}
+                  onClick={handleRejectAll}
                   className="px-4 py-2 text-sm font-medium border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
                 >
                   Alles weigeren
@@ -174,7 +194,7 @@ export default function CookieBanner() {
                   Voorkeur opslaan
                 </button>
                 <button
-                  onClick={acceptAll}
+                  onClick={handleAcceptAll}
                   className="px-4 py-2 text-sm font-medium bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors ml-auto"
                 >
                   Alles accepteren

@@ -20,7 +20,6 @@ import MobileAppDemo from './pages/MobileAppDemo.jsx';
 import Privacybeleid from './pages/Privacybeleid.jsx';
 import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden.jsx';
 import CookieBeleid from './pages/CookieBeleid.jsx';
-import AdminDashboard from './pages/AdminDashboard.jsx';
 import NotFound from './pages/NotFound.jsx';
 
 // JSON-LD Structured Data
@@ -59,7 +58,6 @@ function App() {
         <Route path="/privacybeleid" element={<Privacybeleid />} />
         <Route path="/algemene-voorwaarden" element={<AlgemeneVoorwaarden />} />
         <Route path="/cookie-beleid" element={<CookieBeleid />} />
-        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {!isDemoPage && <Footer />}
