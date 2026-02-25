@@ -466,31 +466,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        {/* CTA */}
-        <div className="text-center mt-12">
-          <p className="text-lg text-neutral-700 mb-6 font-medium">Klaar om jouw digitale project te starten?</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a 
-              href="#contact" 
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-bold shadow-xl hover:shadow-2xl hover:from-green-700 hover:to-green-800 transition-all transform hover:scale-105 hover:-translate-y-1"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-              Plan een gratis gesprek
-            </a>
-            <a 
-              href="#diensten" 
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white border-2 border-green-600 text-green-700 font-bold shadow-lg hover:bg-green-50 hover:border-green-700 hover:shadow-xl transition-all transform hover:scale-105"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              Bekijk onze diensten
-            </a>
-          </div>
-        </div>
       </section>
 
       {/* Testimonials Section */}
