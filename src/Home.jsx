@@ -494,13 +494,20 @@ export default function Home() {
       {/* <TeamSection /> */}
 
       {/* FAQ Section */}
-      <FAQSection />
+      <section id="faq" className="max-w-4xl mx-auto px-4 py-20 scroll-mt-16 md:scroll-mt-20">
+        <div className="mb-4">
+          <div className="inline-block px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-bold uppercase tracking-wide mb-4">
+            05. Veelgestelde vragen
+          </div>
+        </div>
+        <FAQSection />
+      </section>
 
       {/* Contact Section */}
       <section id="contact" className="max-w-4xl mx-auto px-4 py-20 scroll-mt-16 md:scroll-mt-20">
         <div className="mb-4">
           <div className="inline-block px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-bold uppercase tracking-wide mb-4">
-            05. Contact
+            06. Contact
           </div>
         </div>
         <div className="text-center mb-12">

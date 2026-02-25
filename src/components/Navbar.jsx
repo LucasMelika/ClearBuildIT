@@ -7,6 +7,7 @@ const primary = [
   { label: 'Proces', href: '#proces' },
   { label: 'Technologie', href: '#tech' },
   { label: 'Waarom wij?', href: '#features' },
+  { label: 'Veelgestelde vragen', href: '#faq' },
   { label: 'Contact', href: '#contact' }
 ];
 
