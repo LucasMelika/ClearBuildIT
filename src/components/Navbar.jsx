@@ -51,7 +51,7 @@ export default function Navbar() {
     }`}>
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
         {/* Logo */}
-        <Link to="/" className="flex items-center hover:opacity-80 transition flex-shrink-0" aria-label="Home">
+        <Link to="/" onClick={() => window.scrollTo(0, 0)} className="flex items-center hover:opacity-80 transition flex-shrink-0 active:scale-95" aria-label="Home">
           <img src={logo} alt="Logo" className="h-20 w-auto" />
         </Link>
 
