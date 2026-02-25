@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand Column */}
           <div>
-            <img src={logo} alt="ClearBuildIT" className="h-10 mb-3" />
+            <img src={logo} alt="ClearBuildIT" className="h-16 mb-3" />
             <p className="text-neutral-600 text-xs leading-relaxed mb-4 line-clamp-3">
               Premium maatwerk software development voor bedrijven.
             </p>

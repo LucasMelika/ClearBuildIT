@@ -4,7 +4,6 @@ import { seoMeta, breadcrumbSchema } from './utils/seoSchemas.js';
 import ServicesCard from './components/ServicesCard';
 import ContactForm from './components/ContactForm';
 import FAQSection from './components/FAQSection';
-import BlogSection from './components/BlogSection';
 import ScrollCTA from './components/ScrollCTA';
 import { CloudIcon, ShieldCheckIcon, BoltIcon, UsersIcon, DevicePhoneMobileIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 
@@ -535,9 +534,6 @@ export default function Home() {
         </div>
         <FAQSection />
       </section>
-
-      {/* Blog Section */}
-      <BlogSection />
 
       {/* Contact Section */}
       <section id="contact" className="max-w-4xl mx-auto px-4 py-20 scroll-mt-16 md:scroll-mt-20">

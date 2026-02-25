@@ -15,6 +15,9 @@ build/
 .next/
 out/
 
+# Assets
+public/icon.png
+
 # IDE
 .vscode/
 .idea/
