@@ -49,25 +49,26 @@ export default function Navbar() {
         ? 'bg-white/80 backdrop-blur-md shadow-md border-b border-neutral-200' 
         : 'bg-white border-b border-neutral-100'
     }`}>
-      <div className="max-w-6xl mx-auto px-4 flex items-center h-16 relative">
-        {/* Logo left */}
-        <Link to="/" className="flex items-center mr-6 transition-transform hover:scale-105" aria-label="Home">
-          <img src={logo} alt="Logo" className="h-32 w-auto -my-4 select-none" draggable="false" />
+      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+        {/* Logo */}
+        <Link to="/" className="flex items-center hover:opacity-80 transition flex-shrink-0" aria-label="Home">
+          <img src={logo} alt="Logo" className="h-10 w-auto" />
         </Link>
-        {/* Desktop nav center */}
-        <nav className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <ul className="flex gap-8 items-center">
+
+        {/* Desktop nav */}
+        <nav className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <ul className="flex gap-6 items-center whitespace-nowrap">
             {primary.map(item => {
               const isActive = activeSection === item.href.replace('#', '');
               return (
-                <li key={item.label} className="relative flex items-center">
+                <li key={item.label} className="flex items-center">
                   {item.href.startsWith('/') ? (
                     <Link
                       to={item.href}
-                      className={`text-sm font-medium px-1 py-2 transition relative after:content-[''] after:block after:h-[2px] after:bg-gradient-to-r after:from-green-500 after:to-green-600 after:rounded-full after:mt-1 after:w-full after:transition-transform after:duration-200 after:origin-left ${
+                      className={`text-xs font-medium px-0.5 py-2 transition ${
                         isActive 
-                          ? 'text-green-700 after:scale-x-100' 
-                          : 'text-neutral-800 hover:text-black after:scale-x-0 hover:after:scale-x-100'
+                          ? 'text-green-700' 
+                          : 'text-neutral-700 hover:text-neutral-900'
                       }`}
                     >
                       {item.label}
@@ -75,10 +76,10 @@ export default function Navbar() {
                   ) : (
                     <a
                       href={item.href}
-                      className={`text-sm font-medium px-1 py-2 transition relative after:content-[''] after:block after:h-[2px] after:bg-gradient-to-r after:from-green-500 after:to-green-600 after:rounded-full after:mt-1 after:w-full after:transition-transform after:duration-200 after:origin-left ${
+                      className={`text-xs font-medium px-0.5 py-2 transition ${
                         isActive 
-                          ? 'text-green-700 after:scale-x-100' 
-                          : 'text-neutral-800 hover:text-black after:scale-x-0 hover:after:scale-x-100'
+                          ? 'text-green-700' 
+                          : 'text-neutral-700 hover:text-neutral-900'
                       }`}
                     >
                       {item.label}
@@ -89,18 +90,15 @@ export default function Navbar() {
             })}
           </ul>
         </nav>
-        {/* Hamburger for mobile */}
+        {/* Mobile menu button */}
         <button
-          className="md:hidden ml-auto flex items-center justify-center h-10 w-10 rounded border border-neutral-200"
-          aria-label="Open menu"
+          className="md:hidden p-2 hover:bg-neutral-100 rounded transition"
+          aria-label="Menu"
           onClick={() => setOpen(true)}
         >
-          <span className="sr-only">Menu</span>
-          <div className="space-y-1">
-            <span className="block h-0.5 w-6 bg-neutral-800 rounded" />
-            <span className="block h-0.5 w-6 bg-neutral-800 rounded" />
-            <span className="block h-0.5 w-6 bg-neutral-800 rounded" />
-          </div>
+          <svg className="w-6 h-6 text-neutral-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
         </button>
         {/* Mobile drawer */}
         {open && (
