@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
+import { saveFormSubmission, notifySlack } from '../lib/supabase';
 
 export default function ContactForm() {
   // Initialize EmailJS
@@ -161,6 +162,14 @@ export default function ContactForm() {
         templateParams,
         publicKey
       );
+
+      // Save to Supabase
+      const savedSubmission = await saveFormSubmission(formData);
+      
+      // Notify Slack about new submission
+      if (savedSubmission) {
+        await notifySlack(savedSubmission);
+      }
 
       setStatus({ submitting: false, submitted: true, error: null });
       
