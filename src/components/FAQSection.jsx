@@ -53,47 +53,50 @@ export default function FAQSection() {
     {
       id: 10,
       question: 'Hoe veel kost onderdelen van een project?',
-      answer: 'We werken flexibel. Hele projecten, components, modules. Een API-integratie? €500-2k. Een feature? €1-5k. Een extra pagina? €300-800. We geven transparante estimates na een discovery call.'
+      answer: 'De prijs hangt volledig af van jouw wensen en de omvang van het project. Na een vrijblijvend gesprek waarin we samen jouw requirements opstellen, geven we een transparante offerte op maat. Geen verborgen kosten, geen verrassingen.'
     }
   ];
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+    <section className="py-4 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            Veelgestelde vragen
+        <div className="text-center mb-10">
+          <p className="text-xs font-semibold uppercase tracking-widest text-green-600 mb-2">FAQ</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-3">
+            Veelgestelde <span className="text-green-700">vragen</span>
           </h2>
-          <p className="text-xl text-slate-600">
-            Antwoorden op vragen die onze klanten stellen
+          <p className="text-base text-neutral-500 max-w-xl mx-auto">
+            Antwoorden op de vragen die onze klanten het meest stellen.
           </p>
         </div>
 
         {/* FAQ Items */}
-        <div className="space-y-4">
+        <div className="space-y-2">
           {faqs.map((faq, index) => (
             <div
               key={faq.id}
-              className="bg-white rounded-lg border border-slate-200 overflow-hidden"
+              className={`rounded-xl border overflow-hidden transition-all duration-200 ${
+                openIndex === index ? 'border-green-200 shadow-sm' : 'border-neutral-200'
+              }`}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
+                className="w-full px-5 py-3.5 flex items-center justify-between hover:bg-neutral-50 transition-colors text-left"
               >
-                <h3 className="text-left font-semibold text-slate-900 pr-4">
+                <h3 className={`font-semibold pr-4 text-sm ${openIndex === index ? 'text-green-700' : 'text-neutral-900'}`}>
                   {faq.question}
                 </h3>
                 <ChevronDownIcon
-                  className={`w-5 h-5 text-slate-600 flex-shrink-0 transition-transform duration-300 ${
-                    openIndex === index ? 'rotate-180' : ''
+                  className={`w-4 h-4 flex-shrink-0 transition-transform duration-300 ${
+                    openIndex === index ? 'rotate-180 text-green-600' : 'text-neutral-400'
                   }`}
                 />
               </button>
 
               {openIndex === index && (
-                <div className="px-6 py-4 border-t border-slate-200 bg-slate-50">
-                  <p className="text-slate-700 leading-relaxed">{faq.answer}</p>
+                <div className="px-5 pb-4 border-t border-green-100 bg-green-50/40">
+                  <p className="text-sm text-neutral-600 leading-relaxed pt-3">{faq.answer}</p>
                 </div>
               )}
             </div>
@@ -101,16 +104,16 @@ export default function FAQSection() {
         </div>
 
         {/* Contact CTA */}
-        <div className="mt-16 p-8 bg-green-50 rounded-lg border-2 border-green-200 text-center">
-          <h3 className="text-xl font-semibold text-slate-900 mb-4">
+        <div className="mt-8 p-6 bg-gradient-to-br from-green-50 to-emerald-50/50 rounded-2xl border border-green-100 text-center">
+          <h3 className="text-lg font-bold text-neutral-900 mb-2">
             Heb je een specifieke vraag?
           </h3>
-          <p className="text-slate-600 mb-6">
-            Neem contact op met ons team. We beantwoorden je vragen graag persoonlijk.
+          <p className="text-sm text-neutral-600 mb-4">
+            Neem contact op en we beantwoorden je vragen graag persoonlijk.
           </p>
           <a
             href="#contact"
-            className="inline-block px-8 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
+            className="inline-block px-6 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-full text-sm font-semibold hover:from-green-700 hover:to-green-800 hover:shadow-lg transition-all transform hover:scale-105"
           >
             Stuur ons een bericht
           </a>

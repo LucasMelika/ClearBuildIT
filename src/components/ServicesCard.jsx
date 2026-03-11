@@ -55,7 +55,7 @@ function ServiceListItem({ title, desc, icon: Icon, accent }) {
             <h3 className="text-xl font-bold text-neutral-900 mb-2 group-hover:text-green-700 transition">{title}</h3>
             <p className="text-sm text-neutral-600 leading-relaxed">{desc}</p>
           </div>
-          <div className="mt-2 text-green-600 text-sm font-semibold group-hover:underline underline-offset-4">
+          <div className="mt-2 px-4 py-1.5 rounded-full border border-green-200 text-green-700 text-sm font-semibold group-hover:bg-green-600 group-hover:text-white group-hover:border-green-600 transition-all">
             Bekijk demo →
           </div>
         </div>

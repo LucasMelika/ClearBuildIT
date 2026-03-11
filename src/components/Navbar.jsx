@@ -7,7 +7,7 @@ const primary = [
   { label: 'Proces', href: '#proces' },
   { label: 'Technologie', href: '#tech' },
   { label: 'Waarom wij?', href: '#features' },
-  { label: 'Veelgestelde vragen', href: '#faq' },
+  { label: 'FAQ', href: '#faq' },
   { label: 'Contact', href: '#contact' }
 ];
 
@@ -49,10 +49,10 @@ export default function Navbar() {
         ? 'bg-white/80 backdrop-blur-md shadow-md border-b border-neutral-200' 
         : 'bg-white border-b border-neutral-100'
     }`}>
-      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-auto py-3">
+      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-20">
         {/* Logo */}
         <Link to="/" onClick={() => window.scrollTo(0, 0)} className="flex items-center hover:opacity-80 transition flex-shrink-0 active:scale-95" aria-label="Home">
-          <img src={logo} alt="Logo" className="h-28 w-auto" />
+          <img src={logo} alt="Logo" className="h-20 w-auto" />
         </Link>
 
         {/* Desktop nav */}
@@ -65,10 +65,10 @@ export default function Navbar() {
                   {item.href.startsWith('/') ? (
                     <Link
                       to={item.href}
-                      className={`text-xs font-medium px-1 py-2 rounded transition duration-150 active:scale-95 cursor-pointer ${
-                        isActive 
-                          ? 'text-green-700 font-semibold underline underline-offset-2 decoration-green-600 decoration-2' 
-                          : 'text-neutral-700 hover:text-green-600 hover:underline hover:underline-offset-2 hover:decoration-green-400 hover:decoration-1'
+                      className={`relative text-xs font-medium py-1 transition-colors duration-200 active:scale-95 cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-green-500 after:transition-all after:duration-300 ${
+                        isActive
+                          ? 'text-green-700 font-semibold after:w-full'
+                          : 'text-neutral-600 hover:text-green-700 after:w-0 hover:after:w-full'
                       }`}
                     >
                       {item.label}
@@ -76,10 +76,10 @@ export default function Navbar() {
                   ) : (
                     <a
                       href={item.href}
-                      className={`text-xs font-medium px-1 py-2 rounded transition duration-150 active:scale-95 cursor-pointer ${
-                        isActive 
-                          ? 'text-green-700 font-semibold underline underline-offset-2 decoration-green-600 decoration-2' 
-                          : 'text-neutral-700 hover:text-green-600 hover:underline hover:underline-offset-2 hover:decoration-green-400 hover:decoration-1'
+                      className={`relative text-xs font-medium py-1 transition-colors duration-200 active:scale-95 cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-green-500 after:transition-all after:duration-300 ${
+                        isActive
+                          ? 'text-green-700 font-semibold after:w-full'
+                          : 'text-neutral-600 hover:text-green-700 after:w-0 hover:after:w-full'
                       }`}
                     >
                       {item.label}
