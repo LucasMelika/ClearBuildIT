@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
+import { useI18n } from '../i18n.jsx';
 
 export default function CookieBanner() {
+  const { T } = useI18n();
   const [hasConsented, setHasConsented] = useState(true);
   const [showDetailed, setShowDetailed] = useState(false);
   const [analytics, setAnalytics] = useState(true);
@@ -44,12 +46,8 @@ export default function CookieBanner() {
             {/* Simple Banner */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
               <div className="flex-1">
-                <h3 className="font-semibold text-neutral-900 mb-1">
-                  👋 We respecteren uw privacy
-                </h3>
-                <p className="text-sm text-neutral-600">
-                  We gebruiken cookies voor analytics en verbetering van je ervaring. Je kunt je voorkeur aanpassen.
-                </p>
+                <h3 className="font-semibold text-neutral-900 mb-1">{T.cookies.title}</h3>
+                <p className="text-sm text-neutral-600">{T.cookies.desc}</p>
               </div>
 
               <div className="flex flex-wrap gap-3 w-full sm:w-auto">
@@ -57,19 +55,19 @@ export default function CookieBanner() {
                   onClick={handleRejectAll}
                   className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
                 >
-                  Alle weigeren
+                  {T.cookies.rejectAll}
                 </button>
                 <button
                   onClick={() => setShowDetailed(true)}
                   className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
                 >
-                  Aanpassen
+                  {T.cookies.adjust}
                 </button>
                 <button
                   onClick={handleAcceptAll}
                   className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors"
                 >
-                  Alles accepteren
+                  {T.cookies.acceptAll}
                 </button>
               </div>
             </div>
@@ -79,9 +77,7 @@ export default function CookieBanner() {
             {/* Detailed Settings */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-neutral-900">
-                  Cookie Voorkeuren
-                </h3>
+                <h3 className="font-semibold text-neutral-900">{T.cookies.detailedTitle}</h3>
                 <button
                   onClick={() => setShowDetailed(false)}
                   className="text-neutral-500 hover:text-neutral-700"
@@ -101,16 +97,10 @@ export default function CookieBanner() {
                     className="mt-1 cursor-not-allowed"
                   />
                   <div className="flex-1">
-                    <label className="font-medium text-neutral-900">
-                      Essentiële Cookies
-                    </label>
-                    <p className="text-xs text-neutral-600 mt-0.5">
-                      Nodig voor basisfunctionaliteit van de website.
-                    </p>
+                    <label className="font-medium text-neutral-900">{T.cookies.essential}</label>
+                    <p className="text-xs text-neutral-600 mt-0.5">{T.cookies.essentialDesc}</p>
                   </div>
-                  <span className="text-xs font-medium text-neutral-500">
-                    Altijd ingeschakeld
-                  </span>
+                  <span className="text-xs font-medium text-neutral-500">{T.cookies.alwaysOn}</span>
                 </div>
 
                 {/* Analytics */}
@@ -122,12 +112,8 @@ export default function CookieBanner() {
                     className="mt-1"
                   />
                   <div className="flex-1">
-                    <label className="font-medium text-neutral-900">
-                      Analytics & Prestaties
-                    </label>
-                    <p className="text-xs text-neutral-600 mt-0.5">
-                      Helpt ons te begrijpen hoe je onze site gebruikt.
-                    </p>
+                    <label className="font-medium text-neutral-900">{T.cookies.analytics}</label>
+                    <p className="text-xs text-neutral-600 mt-0.5">{T.cookies.analyticsDesc}</p>
                   </div>
                 </div>
 
@@ -140,12 +126,8 @@ export default function CookieBanner() {
                     className="mt-1"
                   />
                   <div className="flex-1">
-                    <label className="font-medium text-neutral-900">
-                      Marketing & Tracking
-                    </label>
-                    <p className="text-xs text-neutral-600 mt-0.5">
-                      Voor gerichte advertenties en retargeting.
-                    </p>
+                    <label className="font-medium text-neutral-900">{T.cookies.marketing}</label>
+                    <p className="text-xs text-neutral-600 mt-0.5">{T.cookies.marketingDesc}</p>
                   </div>
                 </div>
 
@@ -158,46 +140,37 @@ export default function CookieBanner() {
                     className="mt-1"
                   />
                   <div className="flex-1">
-                    <label className="font-medium text-neutral-900">
-                      Voorkeur Cookies
-                    </label>
-                    <p className="text-xs text-neutral-600 mt-0.5">
-                      Voor persoonlijke website-instellingen.
-                    </p>
+                    <label className="font-medium text-neutral-900">{T.cookies.preferences}</label>
+                    <p className="text-xs text-neutral-600 mt-0.5">{T.cookies.preferencesDesc}</p>
                   </div>
                 </div>
               </div>
 
               {/* Links */}
               <div className="flex gap-2 text-xs text-neutral-600">
-                <a href="/privacybeleid" className="hover:text-neutral-900 underline">
-                  Privacybeleid
-                </a>
+                <a href="/privacybeleid" className="hover:text-neutral-900 underline">{T.cookies.privacyLink}</a>
                 <span>•</span>
-                <a href="/cookie-beleid" className="hover:text-neutral-900 underline">
-                  Cookie Beleid
-                </a>
+                <a href="/cookie-beleid" className="hover:text-neutral-900 underline">{T.cookies.cookieLink}</a>
               </div>
 
-              {/* Buttons */}
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={handleRejectAll}
                   className="px-4 py-2 text-sm font-medium border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
                 >
-                  Alles weigeren
+                  {T.cookies.rejectAll2}
                 </button>
                 <button
                   onClick={handleCustom}
                   className="px-4 py-2 text-sm font-medium border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
                 >
-                  Voorkeur opslaan
+                  {T.cookies.save}
                 </button>
                 <button
                   onClick={handleAcceptAll}
                   className="px-4 py-2 text-sm font-medium bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors ml-auto"
                 >
-                  Alles accepteren
+                  {T.cookies.acceptAll}
                 </button>
               </div>
             </div>

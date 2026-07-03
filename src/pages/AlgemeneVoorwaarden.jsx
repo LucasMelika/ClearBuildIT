@@ -214,7 +214,7 @@ const SECTIONS = [
       <div className="colophon">
         <div>
           <span className="cl">E —</span>
-          <a href="mailto:infomelikas@gmail.com">infomelikas@gmail.com</a>
+          <a href="mailto:clearbuildit@gmail.com">clearbuildit@gmail.com</a>
         </div>
         <div>
           <span className="cl">L —</span> Zoetermeer, Nederland
@@ -266,10 +266,6 @@ export default function AlgemeneVoorwaarden() {
     <>
       <Helmet>
         <title>Algemene Voorwaarden · ClearBuildIT</title>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
         <style>{`
           .tc-root {
             --paper: ${PAPER};
@@ -280,8 +276,7 @@ export default function AlgemeneVoorwaarden() {
             background: var(--paper);
             color: var(--ink);
             min-height: 100vh;
-            font-family: 'Fraunces', Georgia, serif;
-            font-feature-settings: "onum" 1, "ss01" 1;
+            font-family: 'Geist', system-ui, sans-serif;
             position: relative;
             overflow-x: hidden;
           }
@@ -307,31 +302,31 @@ export default function AlgemeneVoorwaarden() {
           }
           .tc-wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; position: relative; }
           .tc-eyebrow {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+            font-family: 'Geist Mono', ui-monospace, monospace;
+            font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
             color: var(--muted);
             display: flex; gap: 18px; align-items: center;
           }
           .tc-eyebrow span.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
           .tc-title {
-            font-family: 'Fraunces', serif;
-            font-variation-settings: "opsz" 144, "wght" 400, "SOFT" 50;
-            font-size: clamp(64px, 12vw, 180px);
-            line-height: 0.86;
-            letter-spacing: -0.035em;
+            font-family: 'Geist', sans-serif;
+            font-size: clamp(56px, 10vw, 148px);
+            line-height: 0.92;
+            letter-spacing: -0.045em;
             margin: 28px 0 0;
-            font-weight: 400;
+            font-weight: 500;
           }
           .tc-title em {
-            font-style: italic;
-            font-variation-settings: "opsz" 144, "wght" 300, "SOFT" 100;
+            font-style: normal;
+            font-weight: 400;
             color: var(--accent);
           }
           .tc-meta {
             display: flex; justify-content: space-between; flex-wrap: wrap;
             gap: 20px; margin-top: 48px;
-            font-family: 'JetBrains Mono', monospace; font-size: 12px;
-            color: var(--muted); letter-spacing: 0.06em;
+            font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px;
+            font-weight: 500;
+            color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;
           }
           .tc-meta b { color: var(--ink); font-weight: 500; }
 
@@ -348,8 +343,8 @@ export default function AlgemeneVoorwaarden() {
 
           .tc-toc {
             position: sticky; top: 100px; align-self: start;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px; letter-spacing: 0.04em;
+            font-family: 'Geist Mono', ui-monospace, monospace;
+            font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
           }
           .tc-toc-label {
             color: var(--muted); text-transform: uppercase;
@@ -377,9 +372,8 @@ export default function AlgemeneVoorwaarden() {
           .tc-toc a.active .tc-toc-num { color: var(--accent); }
           .tc-toc-num { color: var(--muted); }
           .tc-toc-title {
-            font-family: 'Fraunces', serif;
-            font-size: 13px; letter-spacing: 0;
-            font-variation-settings: "opsz" 14, "wght" 420;
+            font-family: 'Geist', sans-serif;
+            font-size: 13px; font-weight: 450; letter-spacing: -0.005em;
           }
 
           .tc-sections { max-width: 640px; }
@@ -390,15 +384,15 @@ export default function AlgemeneVoorwaarden() {
             margin-bottom: 28px;
           }
           .tc-sec-num {
-            font-family: 'Fraunces', serif;
-            font-style: italic;
-            font-variation-settings: "opsz" 144, "wght" 300;
-            font-size: 84px; line-height: 1;
-            letter-spacing: -0.04em;
+            font-family: 'Geist', sans-serif;
+            font-weight: 400;
+            font-size: 72px; line-height: 1;
+            letter-spacing: -0.05em;
             -webkit-text-stroke: 1px var(--ink);
             color: transparent;
             flex-shrink: 0;
             position: relative;
+            font-feature-settings: "tnum" 1, "lnum" 1;
           }
           .tc-sec-num::after {
             content: ""; position: absolute; left: 0; right: 10px; bottom: 8px;
@@ -406,17 +400,19 @@ export default function AlgemeneVoorwaarden() {
             z-index: -1;
           }
           .tc-sec-title {
-            font-family: 'Fraunces', serif;
-            font-variation-settings: "opsz" 48, "wght" 440;
-            font-size: 30px; line-height: 1.1;
-            letter-spacing: -0.015em;
+            font-family: 'Geist', sans-serif;
+            font-weight: 500;
+            font-size: 28px; line-height: 1.15;
+            letter-spacing: -0.025em;
             margin: 0;
           }
           .tc-sec-body {
-            font-variation-settings: "opsz" 14, "wght" 400;
-            font-size: 17px;
+            font-family: 'Geist', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
             line-height: 1.65;
-            color: rgba(26,24,21,0.85);
+            color: rgba(26,24,21,0.82);
+            letter-spacing: -0.005em;
           }
           .tc-sec-body p { margin: 0 0 18px; }
           .tc-sec-body p:last-child { margin-bottom: 0; }
@@ -434,20 +430,20 @@ export default function AlgemeneVoorwaarden() {
             color: var(--accent); font-weight: 600;
           }
           .tc-sec-body .cl {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px; letter-spacing: 0.1em;
+            font-family: 'Geist Mono', ui-monospace, monospace;
+            font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
             color: var(--accent);
             margin-right: 10px;
-            vertical-align: 2px;
+            vertical-align: 1px;
           }
           .tc-sec-body .lbl {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px; letter-spacing: 0.14em;
+            font-family: 'Geist Mono', ui-monospace, monospace;
+            font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
             text-transform: uppercase;
             color: var(--muted);
             margin-top: 28px !important; margin-bottom: 8px !important;
           }
-          .tc-sec-body .acc { color: var(--accent); font-style: italic; }
+          .tc-sec-body .acc { color: var(--accent); font-weight: 500; }
           .tc-sec-body em { font-style: italic; color: var(--ink); }
           .tc-sec-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
           .tc-sec-body .colophon { display: grid; gap: 10px; font-size: 17px; }
@@ -456,14 +452,14 @@ export default function AlgemeneVoorwaarden() {
             border-top: 1px solid var(--rule);
             padding: 48px 0 80px;
             display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px; letter-spacing: 0.12em;
+            font-family: 'Geist Mono', ui-monospace, monospace;
+            font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
             text-transform: uppercase; color: var(--muted);
           }
           .tc-foot .mark {
-            font-family: 'Fraunces', serif; font-style: italic;
-            font-variation-settings: "opsz" 144, "wght" 300;
-            font-size: 22px; text-transform: none; letter-spacing: 0;
+            font-family: 'Geist', sans-serif;
+            font-weight: 400;
+            font-size: 15px; text-transform: none; letter-spacing: -0.01em;
             color: var(--ink);
           }
 

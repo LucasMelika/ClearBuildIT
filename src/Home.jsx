@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { seoMeta, breadcrumbSchema } from './utils/seoSchemas.js';
-import ServicesCard from './components/ServicesCard';
 import ContactForm from './components/ContactForm';
 import FAQSection from './components/FAQSection';
+import lucasPhoto from './assets/lucas.png';
+import raffiPhoto from './assets/raffi.png';
 import { CloudIcon, ShieldCheckIcon, BoltIcon, UsersIcon, DevicePhoneMobileIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
+import { useI18n } from './i18n.jsx';
 
 // Animated number for hero stats bar
 function AnimatedNumber({ value, prefix = '', suffix = '', started }) {
@@ -31,7 +34,35 @@ function AnimatedNumber({ value, prefix = '', suffix = '', started }) {
   return <>{prefix}{started ? count : 0}{suffix}</>;
 }
 
+function LiveClock() {
+  const { lang, T } = useI18n();
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const time = now.toLocaleTimeString(lang === 'en' ? 'en-GB' : 'nl-NL', {
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    timeZone: 'Europe/Amsterdam', hour12: false,
+  });
+  const day = now.getDay();
+  const hour = now.getHours();
+  const open = day >= 1 && day <= 5 && hour >= 9 && hour < 18;
+  return (
+    <>
+      <div>52.0608° N · 4.4937° E</div>
+      <div>{T.hero.emblem.location}</div>
+      <b>{time} CET</b>
+      <div className="cb-emblem-status" data-open={open ? '1' : '0'}>
+        <span className="cb-emblem-dot" />
+        {open ? T.hero.emblem.statusOpen : T.hero.emblem.statusClosed}
+      </div>
+    </>
+  );
+}
+
 export default function Home() {
+  const { T } = useI18n();
   const [countStarted, setCountStarted] = useState(false);
   const statsRef = useRef(null);
 
@@ -96,488 +127,1177 @@ export default function Home() {
           ]))}
         </script>
       </Helmet>
-    <main className="bg-white min-h-screen pb-16 scroll-smooth">
-      {/* Hero Section */}
-      <section id="hero" className="relative max-w-4xl mx-auto px-4 pt-20 pb-24 min-h-[calc(100vh-80px)] flex flex-col justify-center text-center overflow-hidden">
-        {/* Subtle background blobs */}
-        <div className="absolute inset-0 -z-10 pointer-events-none">
-          <div className="absolute top-0 -left-40 w-96 h-96 bg-green-400/15 rounded-full blur-3xl"></div>
-          <div className="absolute top-0 -right-40 w-96 h-96 bg-emerald-400/15 rounded-full blur-3xl"></div>
-        </div>
+    <main className="min-h-screen scroll-smooth" style={{ background: '#F6F2E8' }}>
+      <style>{`
+        .cb-hero {
+          --paper: #F6F2E8;
+          --ink: #1A1815;
+          --accent: #0B7E40;
+          --rule: rgba(26,24,21,0.14);
+          --muted: rgba(26,24,21,0.58);
+          background: var(--paper);
+          color: var(--ink);
+          font-family: 'Geist', system-ui, sans-serif;
+          position: relative;
+          overflow: hidden;
+          min-height: calc(100vh - 80px);
+          display: flex;
+          flex-direction: column;
+          padding: 96px 0 80px;
+        }
+        .cb-hero::before {
+          content: "";
+          position: absolute; inset: 0;
+          pointer-events: none;
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.09 0 0 0 0 0.08 0 0 0 0.22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+          opacity: .30;
+          mix-blend-mode: multiply;
+        }
+        .cb-hero::after {
+          content: "";
+          position: absolute;
+          right: -180px; top: 20%;
+          width: 600px; height: 600px;
+          background: radial-gradient(circle, rgba(11,126,64,0.22), transparent 60%);
+          pointer-events: none;
+          filter: blur(40px);
+        }
+        .cb-wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; width: 100%; position: relative; z-index: 1; }
 
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 border border-green-200 text-green-700 text-xs font-semibold uppercase tracking-wide mb-6 w-fit mx-auto">
-          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse flex-shrink-0"></span>
-          ClearBuildIT · Maatwerk software bureau
-        </div>
+        .cb-eyebrow {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+          color: var(--muted);
+          display: flex; align-items: center; gap: 14px;
+          margin-bottom: 56px;
+        }
+        .cb-eyebrow .dot {
+          width: 6px; height: 6px; border-radius: 50%;
+          background: var(--accent);
+          box-shadow: 0 0 0 4px rgba(11,126,64,0.15);
+          animation: cb-pulse 2.4s ease-in-out infinite;
+        }
+        .cb-eyebrow .rule {
+          flex: 0 0 60px; height: 1px; background: var(--rule);
+        }
+        @keyframes cb-pulse {
+          0%, 100% { box-shadow: 0 0 0 4px rgba(11,126,64,0.15); }
+          50% { box-shadow: 0 0 0 8px rgba(11,126,64,0.05); }
+        }
 
-        {/* Headline */}
-        <h1 className="text-5xl md:text-6xl font-extrabold text-neutral-900 leading-tight mb-6">
-          Software die <span className="text-green-700">groeit</span><br className="hidden md:block" /> met jouw bedrijf
-        </h1>
+        .cb-h1 {
+          font-family: 'Fraunces', 'Times New Roman', serif;
+          font-size: clamp(52px, 9.4vw, 148px);
+          line-height: 0.94;
+          letter-spacing: -0.035em;
+          margin: 0;
+          font-weight: 400;
+          font-variation-settings: "opsz" 144, "SOFT" 50;
+          max-width: 14ch;
+          color: var(--ink);
+        }
+        .cb-h1 em {
+          font-style: italic;
+          font-weight: 300;
+          font-variation-settings: "opsz" 144, "SOFT" 100;
+          color: var(--accent);
+          display: inline-block;
+          position: relative;
+          letter-spacing: -0.025em;
+        }
+        .cb-h1 em::after {
+          content: ""; position: absolute;
+          left: 0; right: 0; bottom: 0.04em;
+          height: 1px; background: var(--accent);
+          opacity: .22;
+        }
 
-        {/* Subtext */}
-        <p className="text-lg text-neutral-600 max-w-2xl mx-auto mb-8 leading-relaxed">
-          Jouw idee verdient meer dan een kant-en-klare oplossing. Wij zetten jouw visie om in betaalbare, betrouwbare software die precies doet wat jij nodig hebt, nu en in de toekomst.
-        </p>
+        .cb-sub-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 80px;
+          margin-top: 64px;
+          align-items: start;
+        }
+        @media (max-width: 900px) {
+          .cb-sub-row { grid-template-columns: 1fr; gap: 40px; }
+        }
+        .cb-sub-label {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+          color: var(--muted);
+          margin-bottom: 14px;
+          display: flex; align-items: center; gap: 10px;
+        }
+        .cb-sub-label::before {
+          content: ""; width: 18px; height: 1px; background: var(--ink); opacity: .4;
+        }
+        .cb-sub-text {
+          font-family: 'Geist', sans-serif;
+          font-weight: 400;
+          font-size: 18px; line-height: 1.55;
+          color: rgba(26,24,21,0.78);
+          max-width: 44ch;
+          margin: 0;
+          letter-spacing: -0.005em;
+        }
+        .cb-ctas { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+        .cb-cta {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+          text-decoration: none;
+          padding: 18px 28px;
+          display: inline-flex; align-items: center; gap: 14px;
+          transition: all 200ms ease;
+          border-radius: 999px;
+        }
+        .cb-cta-primary {
+          background: var(--ink); color: var(--paper);
+          border: 1px solid var(--ink);
+        }
+        .cb-cta-primary:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+        .cb-cta-primary .arr { transition: transform 200ms ease; }
+        .cb-cta-primary:hover .arr { transform: translateX(4px); }
+        .cb-cta-ghost {
+          color: var(--ink); border: 1px solid var(--rule);
+          background: transparent;
+        }
+        .cb-cta-ghost:hover { border-color: var(--ink); }
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center mb-14">
-          <a href="#contact" className="inline-block px-8 py-3.5 rounded-full bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold shadow-lg hover:from-green-700 hover:to-green-800 hover:shadow-xl transition-all transform hover:scale-105">
-            Start je project
-          </a>
-          <a href="#features" className="inline-block px-8 py-3.5 rounded-full bg-white border-2 border-neutral-200 text-neutral-700 font-semibold hover:border-green-400 hover:text-green-700 transition-all">
-            Waarom wij?
-          </a>
-        </div>
+        .cb-stats {
+          margin-top: 96px;
+          padding-top: 36px;
+          border-top: 1px solid var(--rule);
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0;
+        }
+        @media (max-width: 900px) {
+          .cb-stats { grid-template-columns: repeat(2, 1fr); row-gap: 36px; }
+        }
+        .cb-stat { padding: 0 28px; position: relative; }
+        .cb-stat:first-child { padding-left: 0; }
+        .cb-stat + .cb-stat::before {
+          content: ""; position: absolute; left: 0; top: 8px; bottom: 8px;
+          width: 1px; background: var(--rule);
+        }
+        .cb-stat-num {
+          font-family: 'Fraunces', 'Times New Roman', serif;
+          font-weight: 400;
+          font-variation-settings: "opsz" 144, "SOFT" 50;
+          font-size: 64px; line-height: 1;
+          letter-spacing: -0.03em;
+          color: var(--ink);
+          font-feature-settings: "tnum" 1, "lnum" 1;
+          display: flex; align-items: baseline;
+        }
+        .cb-stat-num .unit {
+          font-size: 22px;
+          font-weight: 400;
+          color: var(--accent);
+          margin-left: 4px;
+          letter-spacing: -0.02em;
+        }
+        .cb-stat-lbl {
+          margin-top: 14px;
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+          color: var(--muted);
+        }
 
-        {/* Stats bar */}
-        <div ref={statsRef} className="grid grid-cols-3 gap-px bg-neutral-100 rounded-2xl overflow-hidden border border-neutral-100 shadow-sm">
-          <div className="bg-white px-6 py-5">
-            <div className="text-3xl font-black text-green-700 mb-1">
-              <AnimatedNumber value={5} suffix="+" started={countStarted} />
+        .cb-emblem {
+          position: absolute; right: 32px; top: 32px;
+          display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+          color: var(--muted);
+          z-index: 2;
+          padding: 16px 18px;
+          border: 1px solid var(--rule);
+          border-radius: 4px;
+          background: rgba(246,242,232,0.4);
+          backdrop-filter: blur(6px);
+          min-width: 200px;
+        }
+        .cb-emblem b {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-weight: 500;
+          font-size: 13px; letter-spacing: 0.04em; text-transform: none;
+          color: var(--ink);
+          font-variant-numeric: tabular-nums;
+          margin-top: 4px;
+        }
+        .cb-emblem-status {
+          margin-top: 8px; padding-top: 8px;
+          border-top: 1px solid var(--rule);
+          width: 100%;
+          display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+          font-size: 9px;
+        }
+        .cb-emblem-dot {
+          width: 6px; height: 6px; border-radius: 50%;
+          background: #c0392b;
+          box-shadow: 0 0 0 3px rgba(192,57,43,0.18);
+        }
+        .cb-emblem-status[data-open="1"] .cb-emblem-dot {
+          background: var(--accent);
+          box-shadow: 0 0 0 3px rgba(11,126,64,0.18);
+          animation: cb-pulse 2.4s ease-in-out infinite;
+        }
+        @media (max-width: 900px) { .cb-emblem { display: none; } }
+
+        @keyframes cb-rise {
+          from { opacity: 0; transform: translateY(16px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .cb-rise { animation: cb-rise 900ms cubic-bezier(.2,.7,.2,1) both; }
+        .cb-rise-2 { animation-delay: 140ms; }
+        .cb-rise-3 { animation-delay: 260ms; }
+        .cb-rise-4 { animation-delay: 380ms; }
+        .cb-rise-5 { animation-delay: 520ms; }
+      `}</style>
+
+      {/* Hero Section, Atelier edition */}
+      <section id="hero" className="cb-hero">
+        <aside className="cb-emblem cb-rise" aria-label="Studio status">
+          <LiveClock />
+        </aside>
+        <div className="cb-wrap" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <h1 className="cb-h1 cb-rise cb-rise-2">
+            {T.hero.titleLine1}<br/>
+            <em>{T.hero.titleLine2}</em>
+          </h1>
+
+          <div className="cb-sub-row">
+            <div className="cb-rise cb-rise-3">
+              <div className="cb-sub-label">{T.hero.whoWeAre}</div>
+              <p className="cb-sub-text">{T.hero.whoWeAreText}</p>
             </div>
-            <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">Projecten</div>
-          </div>
-          <div className="bg-white px-6 py-5">
-            <div className="text-3xl font-black text-green-700 mb-1">
-              <AnimatedNumber value={98} suffix="%" started={countStarted} />
+            <div className="cb-rise cb-rise-4">
+              <div className="cb-sub-label">{T.hero.start}</div>
+              <div className="cb-ctas">
+                <a href="#contact" className="cb-cta cb-cta-primary">
+                  {T.hero.ctaPrimary}
+                  <span className="arr">→</span>
+                </a>
+                <a href="#proces" className="cb-cta cb-cta-ghost">
+                  {T.hero.ctaGhost}
+                </a>
+              </div>
             </div>
-            <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">Tevredenheid</div>
           </div>
-          <div className="bg-white px-6 py-5">
-            <div className="text-3xl font-black text-green-700 mb-1">~6-8</div>
-            <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">Weken oplevering</div>
-          </div>
-        </div>
 
-        {/* Scroll indicator */}
-        <div className="flex flex-col items-center mt-10 gap-1 text-neutral-400">
-          <span className="text-xs uppercase tracking-widest">Scroll</span>
-          <svg className="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
+          <div ref={statsRef} className="cb-stats cb-rise cb-rise-5">
+            {T.hero.stats.map((s, i) => (
+              <div className="cb-stat" key={i}>
+                <div className="cb-stat-num">
+                  {s.static ? s.val : <AnimatedNumber value={s.val} started={countStarted} />}
+                  {s.suffix && <span className="unit">{s.suffix}</span>}
+                </div>
+                <div className="cb-stat-lbl">{s.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Diensten Section */}
-      <section id="diensten" className="max-w-6xl mx-auto px-4 py-20 bg-white scroll-mt-16 md:scroll-mt-20">
-        <div className="text-center mb-12">
-          <p className="text-xs font-semibold uppercase tracking-widest text-green-600 mb-2">Wat wij bouwen</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-            Onze <span className="text-green-700">Diensten</span>
-          </h2>
-          <p className="text-lg text-neutral-600 max-w-2xl mx-auto mb-6 px-4">
-            Van SaaS-platformen en web applicaties tot mobiele apps en API-integraties. Wij bouwen software die aansluit op jouw processen, ook als je bestaande systemen wilt moderniseren of koppelen.
-          </p>
-        </div>
-        <ServicesCard />
+      <style>{`
+        .cb-sec {
+          --paper: #F6F2E8;
+          --ink: #1A1815;
+          --accent: #0B7E40;
+          --rule: rgba(26,24,21,0.14);
+          --muted: rgba(26,24,21,0.58);
+          font-family: 'Geist', system-ui, sans-serif;
+          color: var(--ink);
+          position: relative;
+        }
+        .cb-sec-paper { background: var(--paper); }
+        .cb-sec-paper::before {
+          content: ""; position: absolute; inset: 0; pointer-events: none;
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.09 0 0 0 0 0.08 0 0 0 0.22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+          opacity: .28; mix-blend-mode: multiply;
+        }
+        .cb-sec-ink { background: var(--ink); color: var(--paper); }
+        .cb-sec-ink::before {
+          content: ""; position: absolute; inset: 0; pointer-events: none;
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.95 0 0 0 0 0.9 0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+          opacity: .5; mix-blend-mode: screen;
+        }
+        .cb-sec-wrap { max-width: 1240px; margin: 0 auto; padding: 120px 32px; position: relative; z-index: 1; }
 
-        {/* Extra diensten */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto mt-6">
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50/50 rounded-2xl p-6 border border-green-100 flex gap-4 hover:shadow-lg transition-all duration-300">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-md">
-              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
+        /* Section header pattern */
+        .cb-sec-head {
+          display: grid; grid-template-columns: 280px 1fr; gap: 80px;
+          align-items: end; margin-bottom: 80px;
+        }
+        @media (max-width: 900px) { .cb-sec-head { grid-template-columns: 1fr; gap: 32px; margin-bottom: 56px; } }
+        .cb-sec-index {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 11px; font-weight: 500; letter-spacing: 0.2em;
+          text-transform: uppercase; color: var(--muted);
+          display: flex; align-items: center; gap: 14px;
+        }
+        .cb-sec-ink .cb-sec-index { color: rgba(246,242,232,0.55); }
+        .cb-sec-index .rule { flex: 1; height: 1px; background: currentColor; opacity: .3; }
+        .cb-sec-index b {
+          color: var(--accent); font-weight: 500;
+          font-variant-numeric: tabular-nums;
+        }
+        .cb-sec-title {
+          font-family: 'Fraunces', 'Times New Roman', serif;
+          font-weight: 400;
+          font-variation-settings: "opsz" 144, "SOFT" 50;
+          font-size: clamp(42px, 6.6vw, 92px);
+          line-height: 0.96;
+          letter-spacing: -0.035em;
+          margin: 0;
+          max-width: 16ch;
+        }
+        .cb-sec-title em {
+          font-style: italic; font-weight: 300; color: var(--accent);
+          font-variation-settings: "opsz" 144, "SOFT" 100;
+          letter-spacing: -0.02em;
+        }
+        .cb-sec-lede {
+          margin-top: 24px;
+          font-size: 17px; line-height: 1.6;
+          color: rgba(26,24,21,0.72);
+          max-width: 46ch;
+          letter-spacing: -0.005em;
+        }
+        .cb-sec-ink .cb-sec-lede { color: rgba(246,242,232,0.74); }
+
+        /* Services, editorial menu rows */
+        .cb-serv {
+          border-top: 1px solid var(--rule);
+        }
+        .cb-serv-row {
+          display: grid;
+          grid-template-columns: 70px 1.2fr 2fr auto;
+          gap: 32px; align-items: center;
+          padding: 32px 0;
+          border-bottom: 1px solid var(--rule);
+          position: relative;
+          text-decoration: none; color: inherit;
+          transition: padding 280ms cubic-bezier(.2,.7,.2,1);
+        }
+        @media (max-width: 820px) {
+          .cb-serv-row { grid-template-columns: 50px 1fr auto; gap: 18px; padding: 24px 0; }
+          .cb-serv-row .desc { grid-column: 1 / -1; margin-top: 2px; }
+        }
+        .cb-serv-row::before {
+          content: ""; position: absolute;
+          left: -32px; right: -32px; top: 0; bottom: 0;
+          background: var(--accent);
+          opacity: 0; transition: opacity 280ms ease;
+          z-index: -1;
+        }
+        .cb-serv-row:hover { padding-left: 24px; padding-right: 24px; color: var(--paper); }
+        .cb-serv-row:hover::before { opacity: 1; }
+        .cb-serv-row:hover .cb-serv-idx,
+        .cb-serv-row:hover .desc,
+        .cb-serv-row:hover .arr { color: inherit; opacity: 1; }
+        .cb-serv-row:hover .cb-serv-idx { color: rgba(246,242,232,0.85); }
+        .cb-serv-row:hover .desc { color: rgba(246,242,232,0.92); }
+
+        .cb-serv-idx {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 12px; font-weight: 500;
+          letter-spacing: 0.14em; color: var(--muted);
+          align-self: start; padding-top: 10px;
+          transition: color 220ms ease;
+        }
+        .cb-serv-title {
+          font-size: clamp(24px, 3.2vw, 40px);
+          font-weight: 500;
+          letter-spacing: -0.03em;
+          line-height: 1.1;
+        }
+        .cb-serv-row .desc {
+          font-size: 15px; line-height: 1.55;
+          color: rgba(26,24,21,0.68);
+          letter-spacing: -0.005em;
+          max-width: 52ch;
+          transition: color 220ms ease;
+        }
+        .cb-serv-row .arr {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 14px; color: var(--muted);
+          transition: all 240ms ease;
+          display: inline-flex; align-items: center; gap: 8px;
+        }
+        .cb-serv-row:hover .arr { transform: translateX(6px); }
+        .cb-serv-row .arr .dot {
+          width: 6px; height: 6px; border-radius: 50%;
+          background: var(--accent);
+        }
+        .cb-serv-row:hover .arr .dot { background: var(--paper); }
+
+        /* Pricing tiers */
+        .cb-pricing {
+          margin-top: 80px;
+          padding-top: 56px;
+          border-top: 1px solid var(--rule);
+        }
+        .cb-pricing-head {
+          display: grid; grid-template-columns: 220px 1fr;
+          gap: 60px; margin-bottom: 40px; align-items: end;
+        }
+        @media (max-width: 760px) {
+          .cb-pricing-head { grid-template-columns: 1fr; gap: 16px; }
+        }
+        .cb-pricing-label {
+          font-family: 'Geist', sans-serif;
+          font-size: 28px; font-weight: 500;
+          letter-spacing: -0.025em;
+          line-height: 1.1;
+          color: var(--ink);
+        }
+        .cb-pricing-label::before {
+          content: "Sectie 02a";
+          display: block;
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 10px; font-weight: 500;
+          letter-spacing: 0.2em; text-transform: uppercase;
+          color: var(--accent);
+          margin-bottom: 10px;
+          letter-spacing: 0.2em;
+        }
+        .cb-pricing-note {
+          font-size: 17px; line-height: 1.55;
+          color: rgba(26,24,21,0.72);
+          letter-spacing: -0.005em;
+          margin: 0; max-width: 52ch;
+        }
+        .cb-pricing-tiers {
+          display: grid; grid-template-columns: repeat(3, 1fr);
+          gap: 0;
+          border-top: 1px solid var(--rule);
+        }
+        @media (max-width: 760px) {
+          .cb-pricing-tiers { grid-template-columns: 1fr; }
+        }
+        .cb-pricing-tier {
+          padding: 32px 32px 32px 0;
+          border-bottom: 1px solid var(--rule);
+          position: relative;
+        }
+        .cb-pricing-tier:not(:last-child) { border-right: 0; }
+        .cb-pricing-tier::before {
+          content: ""; position: absolute;
+          top: -1px; left: 0; width: 56px; height: 2px;
+          background: var(--accent);
+        }
+        .cb-pricing-tier-label {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 10px; font-weight: 500;
+          letter-spacing: 0.2em; text-transform: uppercase;
+          color: var(--muted);
+          margin-top: 20px; margin-bottom: 12px;
+        }
+        .cb-pricing-tier-price {
+          font-size: 44px; font-weight: 500;
+          letter-spacing: -0.04em; line-height: 1;
+          color: var(--ink);
+          margin-bottom: 14px;
+          font-variant-numeric: tabular-nums;
+        }
+        .cb-pricing-tier-price span {
+          color: var(--accent);
+          font-weight: 400;
+        }
+        .cb-pricing-tier-desc {
+          font-size: 14px; line-height: 1.5;
+          color: rgba(26,24,21,0.68);
+          letter-spacing: -0.005em;
+          max-width: 28ch;
+        }
+
+        /* Process timeline */
+        .cb-proc-grid {
+          display: grid; grid-template-columns: repeat(4, 1fr);
+          gap: 0;
+          border-top: 1px solid rgba(246,242,232,0.2);
+        }
+        @media (max-width: 900px) { .cb-proc-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px) { .cb-proc-grid { grid-template-columns: 1fr; } }
+        .cb-proc-step {
+          padding: 40px 48px 48px 0;
+          position: relative;
+        }
+        @media (max-width: 900px) {
+          .cb-proc-step:nth-child(-n+2) { border-bottom: 1px solid rgba(246,242,232,0.14); }
+        }
+        @media (max-width: 560px) {
+          .cb-proc-step { border-bottom: 1px solid rgba(246,242,232,0.14); }
+          .cb-proc-step:last-child { border-bottom: none; }
+        }
+        .cb-proc-step::before {
+          content: ""; position: absolute;
+          top: -4px; left: 0;
+          width: 8px; height: 8px; border-radius: 50%;
+          background: var(--accent);
+        }
+        .cb-proc-num {
+          font-family: 'Geist', sans-serif;
+          font-weight: 400;
+          font-size: 72px; line-height: 1;
+          letter-spacing: -0.06em;
+          color: rgba(246,242,232,0.14);
+          -webkit-text-stroke: 1px rgba(246,242,232,0.35);
+          margin-bottom: 56px;
+          font-variant-numeric: tabular-nums;
+        }
+        .cb-proc-lbl {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 10px; font-weight: 500;
+          letter-spacing: 0.2em; text-transform: uppercase;
+          color: rgba(246,242,232,0.5);
+          margin-bottom: 14px;
+        }
+        .cb-proc-title {
+          font-size: 22px; font-weight: 500;
+          letter-spacing: -0.02em;
+          margin: 0 0 14px;
+          color: var(--paper);
+        }
+        .cb-proc-desc {
+          font-size: 14px; line-height: 1.55;
+          color: rgba(246,242,232,0.65);
+          letter-spacing: -0.005em;
+          max-width: 28ch;
+        }
+
+        .cb-proc-foot {
+          margin-top: 80px;
+          padding-top: 32px;
+          border-top: 1px solid rgba(246,242,232,0.14);
+          display: flex; justify-content: space-between; align-items: center;
+          gap: 24px; flex-wrap: wrap;
+        }
+        .cb-proc-foot-text {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 11px; font-weight: 500;
+          letter-spacing: 0.14em; text-transform: uppercase;
+          color: rgba(246,242,232,0.55);
+          max-width: 42ch;
+        }
+        .cb-proc-cta {
+          display: inline-flex; align-items: center; gap: 12px;
+          padding: 16px 28px; border-radius: 999px;
+          background: var(--paper); color: var(--ink);
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 11px; font-weight: 500;
+          letter-spacing: 0.1em; text-transform: uppercase;
+          text-decoration: none; border: 1px solid var(--paper);
+          transition: all 200ms ease;
+        }
+        .cb-proc-cta:hover { background: var(--accent); border-color: var(--accent); color: var(--paper); transform: translateY(-1px); }
+        .cb-proc-cta .arr { transition: transform 200ms ease; }
+        .cb-proc-cta:hover .arr { transform: translateX(4px); }
+      `}</style>
+
+      {/* Diensten Section, editorial menu */}
+      <section id="diensten" className="cb-sec cb-sec-paper scroll-mt-16 md:scroll-mt-20">
+        <div className="cb-sec-wrap">
+          <div className="cb-sec-head">
+            <div>
+              <div className="cb-sec-index">
+                <span>{T.sectionWord}</span><b>02</b><span>{T.services.sectionLabel}</span><span className="rule" />
+              </div>
             </div>
             <div>
-              <h3 className="text-lg font-bold text-neutral-900 mb-1">Onderhoud & Support</h3>
-              <p className="text-sm text-neutral-600 leading-relaxed">Na oplevering staan wij voor je klaar. Van hosting en security-updates tot doorontwikkeling, wij zorgen dat jouw software altijd optimaal blijft draaien.</p>
+              <h2 className="cb-sec-title">
+                {T.services.titleLine1}<br/>
+                <em>{T.services.titleLine2}</em>
+              </h2>
+              <p className="cb-sec-lede">{T.services.lede}</p>
             </div>
           </div>
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50/50 rounded-2xl p-6 border border-blue-100 flex gap-4 hover:shadow-lg transition-all duration-300">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-md">
-              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-              </svg>
+
+          <div className="cb-serv">
+            {T.services.items.map((s, i) => (
+              <a href="#contact" className="cb-serv-row" key={i}>
+                <span className="cb-serv-idx">{String(i + 1).padStart(2, '0')} / {String(T.services.items.length).padStart(2, '0')}</span>
+                <span className="cb-serv-title">{s.title}</span>
+                <span className="desc">{s.desc}</span>
+                <span className="arr"><span className="dot" />{s.cta}</span>
+              </a>
+            ))}
+          </div>
+
+          <div className="cb-pricing">
+            <div className="cb-pricing-head">
+              <div className="cb-pricing-label">{T.services.pricingLabel}</div>
+              <p className="cb-pricing-note">{T.services.pricingNote}</p>
+            </div>
+            <div className="cb-pricing-tiers">
+              {T.services.tiers.map((tier, i) => (
+                <div className="cb-pricing-tier" key={i}>
+                  <div className="cb-pricing-tier-label">{tier.label}</div>
+                  <div className="cb-pricing-tier-price">{tier.price}<span> +</span></div>
+                  <div className="cb-pricing-tier-desc">{tier.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Proces Section, dark timeline */}
+      <section id="proces" className="cb-sec cb-sec-ink scroll-mt-16 md:scroll-mt-20">
+        <div className="cb-sec-wrap">
+          <div className="cb-sec-head">
+            <div>
+              <div className="cb-sec-index">
+                <span>{T.sectionWord}</span><b>03</b><span>{T.process.sectionLabel}</span><span className="rule" />
+              </div>
             </div>
             <div>
-              <h3 className="text-lg font-bold text-neutral-900 mb-1">Code Audit</h3>
-              <p className="text-sm text-neutral-600 leading-relaxed">Twijfels over de kwaliteit van bestaande code? Wij analyseren jouw codebase op performance, beveiliging en schaalbaarheid en leveren een helder rapport met concrete aanbevelingen.</p>
+              <h2 className="cb-sec-title">
+                {T.process.titleLine1}<br/>
+                <em>{T.process.titleLine2}</em>
+              </h2>
+              <p className="cb-sec-lede">{T.process.lede}</p>
+            </div>
+          </div>
+
+          <div className="cb-proc-grid">
+            {T.process.steps.map((step, i) => (
+              <div className="cb-proc-step" key={i}>
+                <div className="cb-proc-num">{step.num}</div>
+                <div className="cb-proc-lbl">{step.label}</div>
+                <h3 className="cb-proc-title">{step.title}</h3>
+                <p className="cb-proc-desc">{step.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="cb-proc-foot">
+            <div className="cb-proc-foot-text">
+              {T.process.footTextL1}<br/>
+              {T.process.footTextL2}
+            </div>
+            <a href="#contact" className="cb-proc-cta">
+              {T.process.footCta}
+              <span className="arr">→</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <style>{`
+        /* Tech stack */
+        .cb-tech-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0;
+          border-top: 1px solid var(--rule);
+        }
+        @media (max-width: 900px) { .cb-tech-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px) { .cb-tech-grid { grid-template-columns: 1fr; } }
+        .cb-tech-col {
+          padding: 36px 28px 36px 0;
+          position: relative;
+        }
+        .cb-tech-col::before {
+          content: ""; position: absolute; top: -1px; left: 0;
+          width: 48px; height: 2px; background: var(--accent);
+        }
+        .cb-tech-idx {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 10px; font-weight: 500;
+          letter-spacing: 0.2em; text-transform: uppercase;
+          color: var(--muted);
+          margin-bottom: 10px;
+        }
+        .cb-tech-title {
+          font-size: 22px; font-weight: 500;
+          letter-spacing: -0.02em;
+          margin: 0 0 24px;
+        }
+        .cb-tech-list {
+          list-style: none; padding: 0; margin: 0;
+          display: grid; gap: 10px;
+        }
+        .cb-tech-list li {
+          display: flex; align-items: baseline; gap: 12px;
+          font-size: 15px; color: rgba(26,24,21,0.78);
+          letter-spacing: -0.005em;
+        }
+        .cb-tech-list li::before {
+          content: ""; flex-shrink: 0;
+          width: 6px; height: 1px; background: var(--accent);
+          transform: translateY(-4px);
+        }
+        .cb-tech-list li b {
+          font-weight: 500; color: var(--ink);
+        }
+
+        /* Waarom wij, manifesto grid */
+        .cb-why-grid {
+          display: grid; grid-template-columns: repeat(2, 1fr);
+          gap: 0;
+          border-top: 1px solid var(--rule);
+        }
+        @media (max-width: 760px) { .cb-why-grid { grid-template-columns: 1fr; } }
+        .cb-why-item {
+          padding: 40px 48px 40px 0;
+          border-bottom: 1px solid var(--rule);
+          display: grid; grid-template-columns: 64px 1fr;
+          gap: 24px; align-items: start;
+        }
+        .cb-why-item:nth-child(odd) { padding-right: 48px; }
+        .cb-why-item:nth-child(even) {
+          padding-left: 48px; border-left: 1px solid var(--rule);
+        }
+        @media (max-width: 760px) {
+          .cb-why-item,
+          .cb-why-item:nth-child(odd),
+          .cb-why-item:nth-child(even) {
+            padding: 32px 0; border-left: none;
+          }
+        }
+        .cb-why-num {
+          font-size: 48px; font-weight: 400;
+          letter-spacing: -0.05em; line-height: 1;
+          color: transparent;
+          -webkit-text-stroke: 1px var(--ink);
+          font-variant-numeric: tabular-nums;
+        }
+        .cb-why-title {
+          font-size: 20px; font-weight: 500;
+          letter-spacing: -0.015em;
+          margin: 0 0 8px;
+        }
+        .cb-why-desc {
+          font-size: 15px; line-height: 1.6;
+          color: rgba(26,24,21,0.68);
+          letter-spacing: -0.005em;
+          margin: 0;
+        }
+
+        /* Contact */
+        .cb-contact-grid {
+          display: grid; grid-template-columns: 1.1fr 1fr; gap: 80px;
+          align-items: start;
+        }
+        @media (max-width: 900px) { .cb-contact-grid { grid-template-columns: 1fr; gap: 48px; } }
+        .cb-contact-left { position: sticky; top: 100px; }
+        @media (max-width: 900px) { .cb-contact-left { position: static; } }
+        .cb-contact-title {
+          font-family: 'Fraunces', 'Times New Roman', serif;
+          font-variation-settings: "opsz" 144, "SOFT" 50;
+          font-size: clamp(46px, 7.2vw, 108px);
+          font-weight: 400; letter-spacing: -0.035em;
+          line-height: 0.96; margin: 24px 0 32px;
+          max-width: 12ch;
+        }
+        .cb-contact-title em {
+          font-style: italic; font-weight: 300; color: var(--accent);
+          font-variation-settings: "opsz" 144, "SOFT" 100;
+          letter-spacing: -0.02em;
+        }
+        .cb-contact-meta {
+          margin-top: 48px;
+          padding-top: 32px;
+          border-top: 1px solid var(--rule);
+          display: grid; gap: 20px;
+        }
+        .cb-contact-meta-row {
+          display: grid; grid-template-columns: 80px 1fr; gap: 20px;
+          align-items: baseline;
+        }
+        .cb-contact-meta .k {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 10px; font-weight: 500;
+          letter-spacing: 0.2em; text-transform: uppercase;
+          color: var(--muted);
+        }
+        .cb-contact-meta .v {
+          font-size: 17px; letter-spacing: -0.005em;
+          color: var(--ink);
+        }
+        .cb-contact-meta .v a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--accent); }
+        .cb-contact-meta .v a:hover { color: var(--accent); }
+        .cb-contact-form-wrap {
+          background: rgba(26,24,21,0.04);
+          border: 1px solid var(--rule);
+          border-radius: 24px;
+          padding: 32px;
+        }
+        .cb-contact-form-wrap .cb-form-label {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 10px; font-weight: 500;
+          letter-spacing: 0.2em; text-transform: uppercase;
+          color: var(--muted);
+          margin-bottom: 24px;
+          display: flex; align-items: center; gap: 10px;
+        }
+        .cb-contact-form-wrap .cb-form-label::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+      `}</style>
+
+      {/* Tech Stack */}
+      <section id="tech" className="cb-sec cb-sec-paper scroll-mt-16 md:scroll-mt-20">
+        <div className="cb-sec-wrap">
+          <div className="cb-sec-head">
+            <div>
+              <div className="cb-sec-index">
+                <span>{T.sectionWord}</span><b>04</b><span>{T.tech.sectionLabel}</span><span className="rule" />
+              </div>
+            </div>
+            <div>
+              <h2 className="cb-sec-title">
+                {T.tech.titleLine1}<br/>
+                <em>{T.tech.titleLine2}</em>
+              </h2>
+              <p className="cb-sec-lede">{T.tech.lede}</p>
+            </div>
+          </div>
+
+          <div className="cb-tech-grid">
+            <div className="cb-tech-col">
+              <div className="cb-tech-idx">{T.tech.cols[0].idx}</div>
+              <h3 className="cb-tech-title">{T.tech.cols[0].title}</h3>
+              <ul className="cb-tech-list">
+                <li><b>React</b> / Next.js</li>
+                <li><b>TypeScript</b></li>
+                <li>Tailwind CSS</li>
+                <li>React Native · Expo</li>
+              </ul>
+            </div>
+            <div className="cb-tech-col">
+              <div className="cb-tech-idx">{T.tech.cols[1].idx}</div>
+              <h3 className="cb-tech-title">{T.tech.cols[1].title}</h3>
+              <ul className="cb-tech-list">
+                <li><b>Node.js</b> / Python</li>
+                <li>PostgreSQL · MongoDB</li>
+                <li>REST & GraphQL</li>
+                <li>Microservices</li>
+              </ul>
+            </div>
+            <div className="cb-tech-col">
+              <div className="cb-tech-idx">{T.tech.cols[2].idx}</div>
+              <h3 className="cb-tech-title">{T.tech.cols[2].title}</h3>
+              <ul className="cb-tech-list">
+                <li><b>AWS</b> / GCP / Azure</li>
+                <li>Docker · Kubernetes</li>
+                <li>CI/CD pipelines</li>
+                <li>Infrastructure as Code</li>
+              </ul>
+            </div>
+            <div className="cb-tech-col">
+              <div className="cb-tech-idx">{T.tech.cols[3].idx}</div>
+              <h3 className="cb-tech-title">{T.tech.cols[3].title}</h3>
+              <ul className="cb-tech-list">
+                <li><b>AI</b> · Machine Learning</li>
+                <li>Third-party API's</li>
+                <li>Legacy modernisering</li>
+                <li>Payment · auth · CRM</li>
+              </ul>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Hoe werken wij Section */}
-      <section id="proces" className="max-w-6xl mx-auto px-4 py-20 scroll-mt-16 md:scroll-mt-20">
-        <div className="text-center mb-12">
-          <p className="text-xs font-semibold uppercase tracking-widest text-green-600 mb-2">Ons proces</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-3">
-            Hoe werken wij?
-          </h2>
-          <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-            Van eerste gesprek tot live product: ons proces is transparant, iteratief en volledig afgestemd op jouw behoeften. Met vaste review-momenten en duidelijke taakverdeling leveren wij altijd kwaliteit.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-4 gap-8">
-          {/* Step 1 */}
-          <div className="relative">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-2xl font-bold shadow-xl mb-4">
-                1
+      {/* Waarom wij, manifesto */}
+      <section id="features" className="cb-sec cb-sec-paper scroll-mt-16 md:scroll-mt-20">
+        <div className="cb-sec-wrap">
+          <div className="cb-sec-head">
+            <div>
+              <div className="cb-sec-index">
+                <span>{T.sectionWord}</span><b>05</b><span>{T.features.sectionLabel}</span><span className="rule" />
               </div>
-              <h3 className="text-lg font-bold text-neutral-900 mb-2">Strategie & Kennismaking</h3>
-              <p className="text-sm text-neutral-600">
-                Gratis gesprek om je idee te bespreken. Samen stellen we de strategie, specificaties en scope vast.
-              </p>
             </div>
-            <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-orange-300 to-green-300 -translate-x-1/2"></div>
-          </div>
-
-          {/* Step 2 */}
-          <div className="relative">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white text-2xl font-bold shadow-xl mb-4">
-                2
-              </div>
-              <h3 className="text-lg font-bold text-neutral-900 mb-2">Plan & Offerte</h3>
-              <p className="text-sm text-neutral-600">
-                We maken een duidelijk plan met tijdlijn, scope en transparante prijzen.
-              </p>
-            </div>
-            <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-green-300 to-blue-300 -translate-x-1/2"></div>
-          </div>
-
-          {/* Step 3 */}
-          <div className="relative">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-2xl font-bold shadow-xl mb-4">
-                3
-              </div>
-              <h3 className="text-lg font-bold text-neutral-900 mb-2">Development</h3>
-              <p className="text-sm text-neutral-600">
-                Iteratief ontwikkelen met regelmatige updates en feedback momenten.
-              </p>
-            </div>
-            <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-blue-300 to-purple-300 -translate-x-1/2"></div>
-          </div>
-
-          {/* Step 4 */}
-          <div className="relative">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold shadow-xl mb-4">
-                4
-              </div>
-              <h3 className="text-lg font-bold text-neutral-900 mb-2">Launch & Onderhoud</h3>
-              <p className="text-sm text-neutral-600">
-                Live gang, volledige overdracht en doorlopend onderhoud, hosting, updates en doorontwikkeling.
-              </p>
+            <div>
+              <h2 className="cb-sec-title">
+                {T.features.titleLine1}<br/>
+                <em>{T.features.titleLine2}</em>
+              </h2>
+              <p className="cb-sec-lede">{T.features.lede}</p>
             </div>
           </div>
-        </div>
 
-        <div className="mt-12 text-center">
-          <a href="#contact" className="inline-block px-8 py-3 rounded-full bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold shadow-lg hover:from-green-700 hover:to-green-800 hover:shadow-xl transition-all transform hover:scale-105">
-            Start vandaag nog
-          </a>
-        </div>
-      </section>
-
-      {/* Tech Stack Section */}
-      <section id="tech" className="bg-gradient-to-br from-neutral-50 to-blue-50 py-20 scroll-mt-16 md:scroll-mt-20">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold uppercase tracking-widest text-green-600 mb-2">Onze stack</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-3">
-              Moderne technologie
-            </h2>
-            <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-              We werken met de nieuwste en meest betrouwbare technologieën voor schaalbare, veilige oplossingen.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Frontend */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-neutral-100 hover:shadow-xl transition">
-              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
-                </svg>
+          <div className="cb-why-grid">
+            {T.features.items.map((f, i) => (
+              <div className="cb-why-item" key={i}>
+                <div className="cb-why-num">{String(i + 1).padStart(2, '0')}</div>
+                <div>
+                  <h3 className="cb-why-title">{f.title}</h3>
+                  <p className="cb-why-desc">{f.desc}</p>
+                </div>
               </div>
-              <h3 className="font-bold text-neutral-900 mb-2">Frontend</h3>
-              <ul className="text-sm text-neutral-600 space-y-1">
-                <li>• React / Next.js</li>
-                <li>• TypeScript</li>
-                <li>• Tailwind CSS</li>
-                <li>• React Native</li>
-              </ul>
-            </div>
-
-            {/* Backend */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-neutral-100 hover:shadow-xl transition">
-              <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-neutral-900 mb-2">Backend</h3>
-              <ul className="text-sm text-neutral-600 space-y-1">
-                <li>• Node.js / Python</li>
-                <li>• PostgreSQL / MongoDB</li>
-                <li>• REST & GraphQL</li>
-                <li>• Microservices</li>
-              </ul>
-            </div>
-
-            {/* Cloud */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-neutral-100 hover:shadow-xl transition">
-              <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 16h-8z" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-neutral-900 mb-2">Cloud & DevOps</h3>
-              <ul className="text-sm text-neutral-600 space-y-1">
-                <li>• AWS / Azure / GCP</li>
-                <li>• Docker / Kubernetes</li>
-                <li>• CI/CD Pipelines</li>
-                <li>• Infrastructure as Code</li>
-              </ul>
-            </div>
-
-            {/* AI & Integraties */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-neutral-100 hover:shadow-xl transition">
-              <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-neutral-900 mb-2">AI & Integraties</h3>
-              <ul className="text-sm text-neutral-600 space-y-1">
-                <li>• AI / Machine Learning</li>
-                <li>• REST & GraphQL API's</li>
-                <li>• Legacy modernisering</li>
-                <li>• Third-party koppelingen</li>
-              </ul>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Waarom wij? Section */}
-      <section id="features" className="max-w-6xl mx-auto px-4 mb-10 mt-16 bg-white scroll-mt-16 md:scroll-mt-20">
-        <div className="text-center mb-8">
-          <p className="text-xs font-semibold uppercase tracking-widest text-green-600 mb-2">Waarom wij</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-            Waarom <span className="text-green-700">kiezen voor ons</span>?
-          </h2>
-          <p className="text-lg text-neutral-600 max-w-3xl mx-auto px-4">
-            Bij ClearBuildIT draait alles om vertrouwen, kwaliteit en resultaat. We bouwen niet alleen software we bouwen langdurige partnerships met bedrijven die willen groeien.
-          </p>
-        </div>
+      <style>{`
+        .cb-about-grid {
+          display: grid;
+          grid-template-columns: 1.3fr 1fr;
+          gap: 80px;
+          align-items: start;
+        }
+        @media (max-width: 900px) { .cb-about-grid { grid-template-columns: 1fr; gap: 48px; } }
 
-        {/* Trust Indicators */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50/50 rounded-2xl p-8 border border-green-100 hover:shadow-lg transition-all duration-300">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mb-4 shadow-lg shadow-green-500/25">
-              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
+        .cb-about-copy p {
+          font-size: 17px; line-height: 1.7;
+          color: rgba(26,24,21,0.78);
+          letter-spacing: -0.005em;
+          margin: 0 0 18px;
+          max-width: 52ch;
+        }
+        .cb-about-copy p strong { color: var(--ink); font-weight: 500; }
+
+        .cb-about-principles {
+          margin-top: 40px;
+          display: grid; gap: 24px;
+          grid-template-columns: 1fr 1fr;
+        }
+        @media (max-width: 640px) { .cb-about-principles { grid-template-columns: 1fr; } }
+        .cb-about-pcol { }
+        .cb-about-pcol-label {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 10px; font-weight: 500;
+          letter-spacing: 0.2em; text-transform: uppercase;
+          color: var(--muted);
+          margin-bottom: 12px;
+          display: flex; align-items: center; gap: 10px;
+        }
+        .cb-about-pcol-label::before { content: ""; width: 14px; height: 1px; background: var(--ink); opacity: .4; }
+        .cb-about-pcol ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+        .cb-about-pcol li {
+          font-size: 15px; line-height: 1.5; letter-spacing: -0.005em;
+          color: rgba(26,24,21,0.78);
+          padding-left: 18px; position: relative;
+        }
+        .cb-about-pcol--do li::before {
+          content: "+"; position: absolute; left: 0; top: 0;
+          color: var(--accent); font-weight: 600;
+        }
+        .cb-about-pcol--dont li::before {
+          content: "×"; position: absolute; left: 0; top: 0;
+          color: rgba(26,24,21,0.4); font-weight: 600;
+        }
+
+        .cb-about-stack {
+          display: grid; gap: 20px;
+          position: sticky; top: 140px;
+        }
+        @media (max-width: 900px) { .cb-about-stack { position: static; } }
+        .cb-about-card {
+          background: rgba(26,24,21,0.04);
+          border: 1px solid var(--rule);
+          border-radius: 28px;
+          padding: 36px 36px 32px;
+          display: grid; grid-template-columns: 160px 1fr; gap: 32px;
+          align-items: start;
+        }
+        @media (max-width: 520px) { .cb-about-card { grid-template-columns: 1fr; padding: 28px; gap: 24px; } }
+        .cb-about-avatar {
+          width: 160px; height: 160px;
+          border-radius: 20px;
+          background: linear-gradient(145deg, var(--ink) 0%, #3a3530 100%);
+          display: flex; align-items: center; justify-content: center;
+          position: relative; overflow: hidden;
+          box-shadow: 0 10px 30px -10px rgba(26,24,21,0.35);
+          flex-shrink: 0;
+        }
+        @media (max-width: 520px) { .cb-about-avatar { width: 100%; height: auto; aspect-ratio: 1; } }
+        .cb-about-avatar::before {
+          content: "";
+          position: absolute; inset: 0;
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.95 0 0 0 0 0.9 0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+          opacity: .4; mix-blend-mode: screen;
+        }
+        .cb-about-avatar::after {
+          content: ""; position: absolute;
+          right: -60px; bottom: -60px;
+          width: 200px; height: 200px;
+          background: radial-gradient(circle, rgba(11,126,64,0.35), transparent 60%);
+          filter: blur(30px);
+        }
+        .cb-about-avatar img {
+          position: absolute; inset: 0;
+          width: 100%; height: 100%;
+          object-fit: cover;
+          display: block;
+          z-index: 1;
+        }
+        .cb-about-avatar::after { z-index: 2; mix-blend-mode: screen; opacity: 0.4; }
+        .cb-about-info { min-width: 0; }
+        .cb-about-name {
+          font-size: 24px; font-weight: 500;
+          letter-spacing: -0.02em;
+          margin: 0 0 6px;
+        }
+        .cb-about-role {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 11px; font-weight: 500;
+          letter-spacing: 0.14em; text-transform: uppercase;
+          color: var(--accent);
+          margin-bottom: 18px;
+        }
+        .cb-about-bio {
+          font-size: 15px; line-height: 1.6;
+          color: rgba(26,24,21,0.72);
+          letter-spacing: -0.005em;
+          margin: 0 0 18px;
+        }
+        .cb-about-tags {
+          display: flex; flex-wrap: wrap; gap: 6px;
+        }
+        .cb-about-tags span {
+          font-family: 'Geist Mono', ui-monospace, monospace;
+          font-size: 10px; font-weight: 500;
+          letter-spacing: 0.12em; text-transform: uppercase;
+          padding: 5px 11px;
+          border: 1px solid var(--rule);
+          border-radius: 999px;
+          color: var(--ink);
+        }
+      `}</style>
+
+      {/* Over mij */}
+      <section id="over" className="cb-sec cb-sec-paper scroll-mt-16 md:scroll-mt-20">
+        <div className="cb-sec-wrap">
+          <div className="cb-sec-head">
+            <div>
+              <div className="cb-sec-index">
+                <span>{T.sectionWord}</span><b>06</b><span>{T.about.sectionLabel}</span><span className="rule" />
+              </div>
             </div>
-            <h3 className="text-xl font-bold text-neutral-900 mb-3">Betrouwbare partner</h3>
-            <p className="text-neutral-700 leading-relaxed">
-              Wij staan voor transparante communicatie, heldere afspraken en deadlines die we nakomen. Jouw succes is ons succes.
-            </p>
+            <div>
+              <h2 className="cb-sec-title">
+                {T.about.titleLine1}<br/>
+                <em>{T.about.titleLine2}</em>
+              </h2>
+              <p className="cb-sec-lede">{T.about.lede}</p>
+            </div>
           </div>
 
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50/50 rounded-2xl p-8 border border-green-100 hover:shadow-lg transition-all duration-300">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/25">
-              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-neutral-900 mb-3">Bewezen resultaten</h3>
-            <p className="text-neutral-700 leading-relaxed">
-              Met 5+ succesvolle projecten en een klanttevredenheid van 98% hebben we bewezen dat onze aanpak werkt.
-            </p>
-          </div>
+          <div className="cb-about-grid">
+            <div className="cb-about-copy">
+              <p>
+                {T.about.p1Pre}<strong>{T.about.p1A}</strong>{T.about.p1Mid}<strong>{T.about.p1B}</strong>{T.about.p1Post}
+              </p>
+              <p>
+                {T.about.p2Pre}<strong>{T.about.p2Strong}</strong>
+              </p>
+              <p>{T.about.p3}</p>
 
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50/50 rounded-2xl p-8 border border-green-100 hover:shadow-lg transition-all duration-300">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-600 to-emerald-700 flex items-center justify-center mb-4 shadow-lg shadow-green-600/25">
-              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-neutral-900 mb-3">Persoonlijke aandacht</h3>
-            <p className="text-neutral-700 leading-relaxed">
-              Geen anoniem ticketsysteem. Je hebt direct contact met ons team van experts die meedenken en snel schakelen.
-            </p>
-          </div>
-        </div>
-
-        {/* Why Choose Us Grid */}
-        <div className="bg-gradient-to-br from-neutral-50 to-green-50/30 rounded-3xl p-8 md:p-12 border border-neutral-200/50">
-          <h3 className="text-2xl font-bold text-neutral-900 mb-8 text-center">Wat maakt ons anders?</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-bold text-neutral-900 mb-2">100% Maatwerk oplossingen</h4>
-                <p className="text-neutral-700">Geen templates of standaard oplossingen. Alles op maat van jouw wensen en groeiambities.</p>
+              <div className="cb-about-principles">
+                <div className="cb-about-pcol cb-about-pcol--do">
+                  <div className="cb-about-pcol-label">{T.about.doLabel}</div>
+                  <ul>
+                    {T.about.doItems.map((it, i) => <li key={i}>{it}</li>)}
+                  </ul>
+                </div>
+                <div className="cb-about-pcol cb-about-pcol--dont">
+                  <div className="cb-about-pcol-label">{T.about.dontLabel}</div>
+                  <ul>
+                    {T.about.dontItems.map((it, i) => <li key={i}>{it}</li>)}
+                  </ul>
+                </div>
               </div>
             </div>
 
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
+            <aside className="cb-about-stack">
+              <div className="cb-about-card">
+                <div className="cb-about-avatar">
+                  <img src={lucasPhoto} alt="Lucas Wurtz" />
+                </div>
+                <div className="cb-about-info">
+                  <h3 className="cb-about-name">Lucas Wurtz</h3>
+                  <div className="cb-about-role">{T.about.lucasRole}</div>
+                  <p className="cb-about-bio">{T.about.lucasBio}</p>
+                  <div className="cb-about-tags">
+                    <span>React Native</span><span>React</span><span>TypeScript</span>
+                  </div>
+                </div>
               </div>
-              <div>
-                <h4 className="font-bold text-neutral-900 mb-2">Moderne technologie</h4>
-                <p className="text-neutral-700">We werken met toonaangevende tech zoals React, Node.js en cloud-native architectuur voor schaalbaarheid.</p>
-              </div>
-            </div>
 
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
+              <div className="cb-about-card">
+                <div className="cb-about-avatar">
+                  <img src={raffiPhoto} alt="Raphael Eldaery" />
+                </div>
+                <div className="cb-about-info">
+                  <h3 className="cb-about-name">Raphael Eldaery</h3>
+                  <div className="cb-about-role">{T.about.raffiRole}</div>
+                  <p className="cb-about-bio">{T.about.raffiBio}</p>
+                  <div className="cb-about-tags">
+                    <span>Node</span><span>Python</span><span>Postgres</span>
+                  </div>
+                </div>
               </div>
-              <div>
-                <h4 className="font-bold text-neutral-900 mb-2">Snelle oplevering (~6-8 weken)</h4>
-                <p className="text-neutral-700">Door onze agile werkwijze gaan we snel van idee naar live product, met constante feedback loops.</p>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-bold text-neutral-900 mb-2">Ondersteuning na oplevering</h4>
-                <p className="text-neutral-700">Ook na go-live blijven we beschikbaar. Van kleine aanpassingen tot grote uitbreidingen.</p>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-bold text-neutral-900 mb-2">Veiligheid & privacy</h4>
-                <p className="text-neutral-700">Compliance met AVG, veilige hosting en best practices voor databeveiliging zijn standaard.</p>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-bold text-neutral-900 mb-2">Eerlijke prijzen</h4>
-                <p className="text-neutral-700">Heldere offertes zonder verborgen kosten. Je weet precies waar je aan toe bent.</p>
-              </div>
-            </div>
+            </aside>
           </div>
         </div>
       </section>
-
-      {/* Testimonials Section */}
-      {/* <TestimonialsSection /> */}
-
-      {/* Pricing Section */}
-      {/* <PricingSection /> */}
-
-      {/* Process Timeline */}
-      {/* <ProcessTimeline /> */}
-
-      {/* Team Section */}
-      {/* <TeamSection /> */}
 
       {/* FAQ Section */}
-      <section id="faq" className="bg-neutral-50 py-12 scroll-mt-16 md:scroll-mt-20">
-        <div className="max-w-4xl mx-auto px-4">
-          <FAQSection />
-        </div>
+      <section id="faq" className="scroll-mt-16 md:scroll-mt-20">
+        <FAQSection />
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="max-w-4xl mx-auto px-4 pt-12 pb-6 scroll-mt-16 md:scroll-mt-20">
-        <div className="text-center mb-12">
-          <p className="text-xs font-semibold uppercase tracking-widest text-green-600 mb-2">Contact</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-3">
-            Klaar om te starten?
-          </h2>
-          <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-            Neem contact op en ontdek hoe wij jouw digitale ambities kunnen realiseren. Geen verplichtingen, gewoon een vrijblijvend gesprek.
-          </p>
-        </div>
+      <section id="contact" className="cb-sec cb-sec-paper scroll-mt-16 md:scroll-mt-20">
+        <div className="cb-sec-wrap">
+          <div className="cb-sec-head">
+            <div>
+              <div className="cb-sec-index">
+                <span>{T.sectionWord}</span><b>08</b><span>{T.contact.sectionLabel}</span><span className="rule" />
+              </div>
+            </div>
+            <div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10,
+                fontFamily: "'Geist Mono', ui-monospace, monospace",
+                fontSize: 11, fontWeight: 500, letterSpacing: '0.18em',
+                textTransform: 'uppercase', color: 'var(--muted)' }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%',
+                  background: 'var(--accent)',
+                  boxShadow: '0 0 0 4px rgba(11,126,64,0.15)' }} />
+                {T.contact.availability}
+              </div>
+            </div>
+          </div>
 
-        <div className="grid md:grid-cols-2 gap-10">
-          {/* Contact Form */}
-          <ContactForm />
+          <div className="cb-contact-grid">
+            <div className="cb-contact-left">
+              <h2 className="cb-contact-title">
+                {T.contact.titleLine1}<br/>
+                <em>{T.contact.titleLine2}</em>
+              </h2>
+              <p className="cb-sec-lede" style={{ margin: 0, maxWidth: '42ch' }}>{T.contact.lede}</p>
 
-          {/* Contact Info */}
-          <div className="space-y-6">
-            <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8 border border-green-100">
-              <h3 className="text-xl font-bold text-neutral-900 mb-4">Direct contact</h3>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-green-600 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-neutral-500">Email</div>
-                    <a href="mailto:info@clearbuildit.nl" className="text-neutral-900 font-semibold hover:text-green-700 transition">info@clearbuildit.nl</a>
-                  </div>
+              <div className="cb-contact-meta">
+                <div className="cb-contact-meta-row">
+                  <span className="k">{T.contact.meta.email}</span>
+                  <span className="v"><a href="mailto:clearbuildit@gmail.com">clearbuildit@gmail.com</a></span>
                 </div>
-                
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-green-600 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-neutral-500">Telefoon</div>
-                    <a href="tel:+31612345678" className="text-neutral-900 font-semibold hover:text-blue-700 transition">+31 6 1234 5678</a>
-                  </div>
+                <div className="cb-contact-meta-row">
+                  <span className="k">{T.contact.meta.location}</span>
+                  <span className="v">{T.contact.meta.locationValue}</span>
                 </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-green-600 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-neutral-500">Locatie</div>
-                    <div className="text-neutral-900 font-semibold">Nederland</div>
-                    <div className="text-sm text-neutral-600">Remote-first, op locatie mogelijk</div>
-                  </div>
+                <div className="cb-contact-meta-row">
+                  <span className="k">{T.contact.meta.hours}</span>
+                  <span className="v">{T.contact.meta.hoursValue}</span>
+                </div>
+                <div className="cb-contact-meta-row">
+                  <span className="k">{T.contact.meta.response}</span>
+                  <span className="v">{T.contact.meta.responseValue}</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-xl p-8 border border-neutral-100">
-              <h3 className="text-lg font-bold text-neutral-900 mb-3">Snelle respons</h3>
-              <p className="text-sm text-neutral-600 mb-4">
-                We streven ernaar om binnen <strong className="text-green-700">24 uur</strong> te reageren op alle aanvragen. Meestal hoor je binnen een paar uur al van ons!
-              </p>
-              <div className="flex items-center gap-2 text-sm text-neutral-500">
-                <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>Geen verplichtingen, gratis kennismaking</span>
+            <div className="cb-contact-form-wrap">
+              <div className="cb-form-label">
+                <span>{T.contact.formLabel}</span>
+                <span style={{ flex: 0, opacity: 0.6, fontFamily: 'inherit' }}>/ 01</span>
               </div>
+              <ContactForm />
             </div>
           </div>
         </div>

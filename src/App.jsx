@@ -15,17 +15,13 @@ import Navbar from './components/Navbar.jsx';
 import Home from './Home';
 import Footer from './components/Footer.jsx';
 import CookieBanner from './components/CookieBanner.jsx';
-import SaaSDemo from './pages/SaaSDemo.jsx';
-import WebAppDemo from './pages/WebAppDemo.jsx';
-import MobileAppDemo from './pages/MobileAppDemo.jsx';
 import Privacybeleid from './pages/Privacybeleid.jsx';
 import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden.jsx';
 import CookieBeleid from './pages/CookieBeleid.jsx';
 import NotFound from './pages/NotFound.jsx';
+import { I18nProvider } from './i18n.jsx';
 
 function App() {
-  const location = useLocation();
-  const isDemoPage = location.pathname.startsWith('/demo/');
   
   return (
     <>
@@ -54,15 +50,12 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/demo/saas" element={<SaaSDemo />} />
-        <Route path="/demo/webapp" element={<WebAppDemo />} />
-        <Route path="/demo/mobile" element={<MobileAppDemo />} />
         <Route path="/privacybeleid" element={<Privacybeleid />} />
         <Route path="/algemene-voorwaarden" element={<AlgemeneVoorwaarden />} />
         <Route path="/cookie-beleid" element={<CookieBeleid />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {!isDemoPage && <Footer />}
+      <Footer />
       <CookieBanner />
     </>
   );
@@ -70,8 +63,10 @@ function App() {
 
 export default function AppWithRouter() {
   return (
-    <Router>
-      <App />
-    </Router>
+    <I18nProvider>
+      <Router>
+        <App />
+      </Router>
+    </I18nProvider>
   );
 }

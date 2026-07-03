@@ -9,7 +9,7 @@ export const organizationSchema = {
   "description": "Maatwerk SaaS-platformen, websites, webapps en mobile apps voor groeiende bedrijven",
   "url": "https://clearbuildit.nl",
   "telephone": "+31 (0)20 123 4567",
-  "email": "info@clearbuildit.nl",
+  "email": "clearbuildit@gmail.com",
   "areaServed": {
     "@type": "Country",
     "name": "Netherlands"
